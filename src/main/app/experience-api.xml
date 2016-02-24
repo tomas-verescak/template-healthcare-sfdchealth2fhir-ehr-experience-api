@@ -80,12 +80,15 @@ payload.patientID]]></dw:set-variable>
 ---
 payload.patientIDType]]></dw:set-variable>
         </dw:transform-message>
-        <scatter-gather doc:name="Scatter-Gather">
-            <flow-ref name="loadClinicalDataSub_Flow" doc:name="Call loadClinicalDataSub_Flow"/>
-            <flow-ref name="loadClinicalDataSub_Flow_Condition" doc:name="Call loadClinicalDataSub_Flow_Condition"/>
-            <flow-ref name="loadClinicalDataSub_Flow_Observation" doc:name="Call loadClinicalDataSub_Flow_Observation"/>
-            <flow-ref name="loadClinicalDataSub_MedicationPrescription" doc:name="Call loadClinicalDataSub_Flow_MedicationPrescription"/>
-        </scatter-gather>
+        <async processingStrategy="API Autodiscovery" doc:name="Async">
+            <scatter-gather doc:name="Scatter-Gather">
+                <flow-ref name="loadClinicalDataSub_Flow" doc:name="Call loadClinicalDataSub_Flow"/>
+                <flow-ref name="loadClinicalDataSub_Flow_Condition" doc:name="Call loadClinicalDataSub_Flow_Condition"/>
+                <flow-ref name="loadClinicalDataSub_Flow_Observation" doc:name="Call loadClinicalDataSub_Flow_Observation"/>
+                <flow-ref name="loadClinicalDataSub_MedicationPrescription" doc:name="Call loadClinicalDataSub_Flow_MedicationPrescription"/>
+            </scatter-gather>
+        </async>
+
         <logger message="The POST process has finished." level="INFO" doc:name="Log the success"/>
         <dw:transform-message doc:name="Create response JSON">
             <dw:set-payload><![CDATA[%dw 1.0
