@@ -1,0 +1,17 @@
+#%RAML 0.8
+title: healthcare-sfdchealth2fhir-ehr-experience-api
+baseUri: http://healthcare-sfdchealth2fhir-ehr-experience-api.cloudhub.io/api
+version: v1
+/human/loadClinicalData:
+  displayName: loadClinicalData
+  post:
+    description: POST clinical data to Salesforce Health Cloud
+    body:
+        application/json:
+         example: !include experience-api-request.json
+    responses:
+      201:
+        body:
+          application/json:
+            example: !include experience-api-response.json
+               

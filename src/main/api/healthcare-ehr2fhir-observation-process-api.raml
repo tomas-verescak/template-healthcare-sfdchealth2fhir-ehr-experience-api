@@ -1,0 +1,26 @@
+#%RAML 0.8
+title: healthcare-ehr2fhir-observation-process-api
+baseUri: https://healthcare-ehr2fhir-observation-process-api.cloudhub.io/api
+mediaType: application/json
+version: v1
+/patients/{patientIDType}/{patientID}/observations:
+  displayName: observation
+  uriParameters:
+    patientID:
+      type: string
+      description: Patient ID
+    patientIDType:
+      type: string
+      description: ID Type like MRN
+  get:
+    description: Get observation information for given patient - FHIR
+    queryParameters:
+      mock:
+        type: string
+        enum: [on, off]
+        required: false
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include observation-fhir-response.json
