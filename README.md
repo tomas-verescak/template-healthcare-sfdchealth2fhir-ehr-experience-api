@@ -22,9 +22,9 @@ Please review the terms of the license before downloading and using this templat
 
 As an Salesforce HealthCloud user I want a service to trigger to access Clinical data from an EHR system .
 
-This template should serve as a foundation for implementing an API for exposing Clinical data via FHIR process APIs and EHR system API. The API is defined using [RAML](https://docs.mulesoft.com/anypoint-platform-for-apis/walkthrough-design-existing#about-raml) and this implementation uses [APIkit](https://docs.mulesoft.com/anypoint-platform-for-apis/apikit-basic-anatomy#basic-anatomy). EHR Experience API retrieves data from the microservices defined in FHIR Process APIs in JSON (FHIR specification [version 1.0.2 DSTU2](https://www.hl7.org/FHIR/DSTU2/index.html)) and transforms them to the SFDC HealthCloud structures.
+This template should serve as a foundation for implementing an API for exposing Clinical data via FHIR Process APIs and EHR System API. The API is defined using [RAML](https://docs.mulesoft.com/anypoint-platform-for-apis/walkthrough-design-existing#about-raml) and this implementation uses [APIkit](https://docs.mulesoft.com/anypoint-platform-for-apis/apikit-basic-anatomy#basic-anatomy). EHR Experience API retrieves data from the microservices defined in FHIR Process APIs in JSON (FHIR specification [version 1.0.2 DSTU2](https://www.hl7.org/FHIR/DSTU2/index.html)) and transforms them to the SFDC HealthCloud structures.
 
-SFDC Health Cloud to FHIR Experience API is part of the Healthcare Templates Solution and it is interconnected with FHIR Process APIs(used for retrieving Clinical data) and EHR System API(used for persisting Clinical data in SFDC Health Cloud). However it is designed to be exposed externally and triggered by SFDC Health Cloud, it is using HTTPS endpoint with basic authentication for external calls, HTTPS calls are used to FHIR Process APIs and HTTP calls to EHR System API. For more information see [API Security Considerations](#apissecurityconsiderations).
+SFDC HealthCloud to FHIR Experience API is part of the Healthcare Templates Solution and it is interconnected with FHIR Process APIs(used for retrieving Clinical data) and EHR System API(used for persisting Clinical data in SFDC Health Cloud). However it is designed to be exposed externally and triggered by SFDC Health Cloud. For this purpose it is using HTTPS endpoint with basic authentication for external calls, HTTPS calls are used to FHIR Process APIs and HTTP calls to EHR System API. For more information see [API Security Considerations](#apissecurityconsiderations).
 
 # Considerations <a name="considerations"/>
 
@@ -39,9 +39,13 @@ To make this Anypoint Template run, there are certain preconditions that must be
 + **Cloudhub will not replace provided SSL certificates for internal calls**, therefore they should be valid for the mentioned URL naming convention
 
 ## APIs security considerations <a name="apissecurityconsiderations"/>
+This Experience API is meant to be deployed within a CloudHub.
+
+### Exposing external endpoints with HTTPS and basic authentication
+++ It is triggered by SFDC Health Cloud using HTTPS
+++ It is secured using basic authentication policy on CloudHub (for more information see Applying policies on CloudHub](#applyingpolicies)). 
 
 ### Exposing internal endpoints with RAML and HTTPS
-+ This Experience API is meant to be deployed within a CloudHub.
 + It is interconnected internally with FHIR Process APIs, which are deployed within a CloudHub VPC.
 
 # Run it! <a name="runit"/>
