@@ -51,7 +51,7 @@ http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/
       </tls:context>
       <http:raml-api-configuration location="healthcare-ehr2fhir-condition-process-api.raml"/>
     </http:request-config>
-    <sfdc:config name="Salesforce__Basic_authentication" username="${sfdc.username}" password="${sfdc.password}" securityToken="${sfdc.token}" doc:name="Salesforce: Basic authentication"/>
+
     <http:request-config name="MedicationPrescription_API" host="${api.medicationprescription}" port="${api.medicationprescription.port}"  doc:name="HTTP Request Configuration" basePath="/api" protocol="HTTPS">
          <tls:context>
             <tls:trust-store path="${truststore.location}" password="${truststore.password}" type="jks"/>
