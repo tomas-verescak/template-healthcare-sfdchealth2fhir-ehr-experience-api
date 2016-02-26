@@ -20,11 +20,11 @@ Please review the terms of the license before downloading and using this templat
 
 # Use Case <a name="usecase"/>
 
-As an Salesforce HealthCloud user I want a service to trigger to access Clinical data from an EHR system 
+As an Salesforce HealthCloud user I want a service to trigger to access Clinical data from an EHR system .
 
-This template should serve as a foundation for implementing an API for Clinical data via FHIR process APIs. The API is defined using [RAML](https://docs.mulesoft.com/anypoint-platform-for-apis/walkthrough-design-existing#about-raml) and this implementation uses [APIkit](https://docs.mulesoft.com/anypoint-platform-for-apis/apikit-basic-anatomy#basic-anatomy). EHR Experience API retrieves data from the microservices defined in FHIR Process APIs in JSON (FHIR specification [version 1.0.2 DSTU2](https://www.hl7.org/FHIR/DSTU2/index.html)) and transforms them to the SFDC HealthCloud structures.
+This template should serve as a foundation for implementing an API for exposing Clinical data via FHIR process APIs and EHR system API. The API is defined using [RAML](https://docs.mulesoft.com/anypoint-platform-for-apis/walkthrough-design-existing#about-raml) and this implementation uses [APIkit](https://docs.mulesoft.com/anypoint-platform-for-apis/apikit-basic-anatomy#basic-anatomy). EHR Experience API retrieves data from the microservices defined in FHIR Process APIs in JSON (FHIR specification [version 1.0.2 DSTU2](https://www.hl7.org/FHIR/DSTU2/index.html)) and transforms them to the SFDC HealthCloud structures.
 
-SFDC Health Cloud to FHIR Experience API is part of the Healthcare Templates Solution and it is interconnected with FHIR Process APIs(used for retrieving clinical data) and EHR System API(used for persisting data in SFDC Health Cloud). However it is designed to be exposed externally and triggered by SFDC Health Cloud, it is using HTTPS endpoint with basic authentication for external calls, HTTPS calls are used to FHIR Process APIs and HTTP calls to EHR System API. For more information see [API Security Considerations](#apissecurityconsiderations).
+SFDC Health Cloud to FHIR Experience API is part of the Healthcare Templates Solution and it is interconnected with FHIR Process APIs(used for retrieving Clinical data) and EHR System API(used for persisting Clinical data in SFDC Health Cloud). However it is designed to be exposed externally and triggered by SFDC Health Cloud, it is using HTTPS endpoint with basic authentication for external calls, HTTPS calls are used to FHIR Process APIs and HTTP calls to EHR System API. For more information see [API Security Considerations](#apissecurityconsiderations).
 
 # Considerations <a name="considerations"/>
 
@@ -45,7 +45,7 @@ To make this Anypoint Template run, there are certain preconditions that must be
 + It is interconnected internally with FHIR Process APIs, which are deployed within a CloudHub VPC.
 
 # Run it! <a name="runit"/>
-Simple steps to get Healthcare SFDCHEALTH to FHIR EHR Experience API running.
+Simple steps to get Healthcare SFDC HealthCloud to FHIR EHR Experience API running.
 See below.
 
 ## Running on premise <a name="runonopremise"/>
@@ -95,7 +95,7 @@ TODO
 In order to use this Mule Anypoint Template you need to configure properties (Credentials, configurations, etc.) either in properties file or in CloudHub as Environment Variables. Detail list with examples:
 ### Application properties
 
-#HTTPS configuration
+####HTTPS configuration
 + https.port `8082` 
 + keystore.location `keystore.jks` 
 + keystore.password `pass123!`
@@ -104,16 +104,16 @@ In order to use this Mule Anypoint Template you need to configure properties (Cr
 + truststore.location `truestore` 
 + truststore.password `true123`
 
-#API auto-discovery
+####API auto-discovery
 + api.id `123`
 + api.name `example-api`
 + api.version `v1` 
 
-#API Platform Organization
+####API Platform Organization
 + anypoint.platform.client_id `cloudhub_client_id` 
 + anypoint.platform.client_secret `cloudhub_client_id` 
 
-#API calls configuration
+####API calls configuration
 + api.condition `link_to_condition_process_api`
 + api.condition.port `8092` 
 + api.observation `link_to_observation_process_api`
