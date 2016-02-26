@@ -20,9 +20,9 @@ Please review the terms of the license before downloading and using this templat
 
 # Use Case <a name="usecase"/>
 
-As an Salesforce HealthCloud user I want a service to trigger to access Clinical data from an EHR system .
+As a Salesforce Health Cloud user I want a service to request Clinical data from an EHR system to be updated in my Salesforce instance.
 
-This template should serve as a foundation for implementing an API for exposing Clinical data via FHIR Process APIs and EHR System API. The API is defined using [RAML](https://docs.mulesoft.com/anypoint-platform-for-apis/walkthrough-design-existing#about-raml) and this implementation uses [APIkit](https://docs.mulesoft.com/anypoint-platform-for-apis/apikit-basic-anatomy#basic-anatomy). EHR Experience API retrieves data from the microservices defined in FHIR Process APIs in JSON (FHIR specification [version 1.0.2 DSTU2](https://www.hl7.org/FHIR/DSTU2/index.html)) and transforms them to the SFDC HealthCloud structures.
+This template should serve as a foundation for implementing an API that connects Salesforce Health Cloud with the FHIR Process APIs that are provided as part of the Healthcare Templates Solution. The API is defined using [RAML](https://docs.mulesoft.com/anypoint-platform-for-apis/walkthrough-design-existing#about-raml) and this implementation uses [APIkit](https://docs.mulesoft.com/anypoint-platform-for-apis/apikit-basic-anatomy#basic-anatomy). EHR Experience API retrieves data from the microservices defined in FHIR Process APIs in JSON (FHIR specification [version 1.0.2 DSTU2](https://www.hl7.org/FHIR/DSTU2/index.html)) and transforms them to the SFDC HealthCloud structures.
 
 SFDC HealthCloud to FHIR Experience API is part of the Healthcare Templates Solution and it is interconnected with FHIR Process APIs(used for retrieving Clinical data) and EHR System API(used for persisting Clinical data in SFDC Health Cloud). However it is designed to be exposed externally and triggered by SFDC Health Cloud. For this purpose it is using HTTPS endpoint with basic authentication for external calls, HTTPS calls are used to FHIR Process APIs and HTTP calls to EHR System API. For more information see [API Security Considerations](#apissecurityconsiderations).
 
@@ -39,11 +39,11 @@ To make this Anypoint Template run, there are certain preconditions that must be
 + **Cloudhub will not replace provided SSL certificates for internal calls**, therefore they should be valid for the mentioned URL naming convention
 
 ## APIs security considerations <a name="apissecurityconsiderations"/>
-This Experience API is meant to be deployed within a CloudHub.
+This Experience API is meant to be deployed to CloudHub and managed using the API Platform Manager.
 
 ### Exposing external endpoints with HTTPS and basic authentication
 + It is triggered by SFDC Health Cloud using HTTPS
-+ It is secured using basic authentication policy on CloudHub (for more information see [Applying policies on CloudHub](applyingpolicies)). 
++ It is secured using basic authentication policy on API Platform. For more information see [Applying policies on API Platform](#applyingpolicies).
 
 ### Exposing internal endpoints with RAML and HTTPS
 + It is interconnected internally with FHIR Process APIs, which are deployed within a CloudHub VPC.
@@ -93,10 +93,10 @@ Follow other steps defined [here](#runonpremise) and once your app is all set an
 Mule Studio provides you with really easy way to deploy your Template directly to CloudHub, for the specific steps to do so please check this [link](http://www.mulesoft.org/documentation/display/current/Deploying+Mule+Applications#DeployingMuleApplications-DeploytoCloudHub)
 
 ### Applying policies on CloudHub <a name="applyingpolicies"/>
-TODO
+When a Mule application is deployed using the Mule API Gateway Runtime, the API Platform allows to dinamically apply different policies that can be used for securizing the application, among many other cases. More information can be found in [Anypoint Platform for APIs](https://docs.mulesoft.com/anypoint-platform-for-apis/applying-runtime-policies)
 
 ## Properties to be configured (With examples) <a name="propertiestobeconfigured"/>
-In order to use this Mule Anypoint Template you need to configure properties (Credentials, configurations, etc.) either in properties file or in CloudHub as Environment Variables. Detail list with examples:
+In order to use this Mule Anypoint Template you need to configure properties (Credentials, configurations, etc.) either in properties file or in CloudHub as Environment Variables. Detailed list with examples:
 ### Application properties
 
 ####HTTPS configuration
