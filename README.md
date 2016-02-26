@@ -43,7 +43,7 @@ This Experience API is meant to be deployed within a CloudHub.
 
 ### Exposing external endpoints with HTTPS and basic authentication
 + It is triggered by SFDC Health Cloud using HTTPS
-+ It is secured using basic authentication policy on CloudHub (for more information see Applying policies on CloudHub](#applyingpolicies)). 
++ It is secured using basic authentication policy on CloudHub (for more information see [Applying policies on CloudHub](applyingpolicies)). 
 
 ### Exposing internal endpoints with RAML and HTTPS
 + It is interconnected internally with FHIR Process APIs, which are deployed within a CloudHub VPC.
