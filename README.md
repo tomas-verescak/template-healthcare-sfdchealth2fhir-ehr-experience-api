@@ -1,4 +1,4 @@
-# Template Healthcare SFDCHEALTH to FHIR EHR Experience API
+# Template Healthcare SFDC HealthCloud to FHIR EHR Experience API
 
 + [License Agreement](#licenseagreement)
 + [Use Case](#usecase)
@@ -115,7 +115,7 @@ In order to use this Mule Anypoint Template you need to configure properties (Cr
 
 ####API Platform Organization
 + anypoint.platform.client_id `cloudhub_client_id` 
-+ anypoint.platform.client_secret `cloudhub_client_id` 
++ anypoint.platform.client_secret `cloudhub_client_secret` 
 
 ####API calls configuration
 + api.condition `link_to_condition_process_api`
