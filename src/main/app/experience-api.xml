@@ -73,6 +73,12 @@ http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/
         <http:raml-api-configuration location="healthcare-fhir2sfdchealth-ehr-system-api.raml"/>
 
     </http:request-config>
+    <http:request-config name="AllergyIntolerance_API" protocol="HTTPS" host="${api.allergyIntolerance.host}" port="${api.allergyIntolerance.port}" basePath="${api.allergyIntolerance.basepath}" doc:name="HTTP Request Configuration">
+        <tls:context>
+            <tls:trust-store path="${truststore.location}" password="${truststore.password}" type="jks"/>
+        </tls:context>
+        <http:raml-api-configuration location="healthcare-ehr2fhir-allergyintolerance-process-api.raml"/>
+    </http:request-config>
     <flow name="api-main">
         <http:listener config-ref="api-httpListenerConfig" path="/api/*" doc:name="HTTP"/>
         <apikit:router config-ref="api-config" doc:name="APIkit Router"/>
@@ -186,6 +192,21 @@ payload.patientIDType]]></dw:set-variable>
                 <http:uri-param paramName="patientIDType" value="#[flowVars.patientIDType]"/>
                 <http:uri-param paramName="patientID" value="#[flowVars.patientID]"/>
 
+
+            </http:request-builder>
+        </http:request>
+    </sub-flow>
+    <sub-flow name="AllergyIntolerance">
+        <http:request config-ref="AllergyIntolerance_API" path="/patients/{patientIDType}/{patientID}/allergies" method="GET" doc:name="GET AllergyIntolerance">
+            <http:request-builder>
+                <http:uri-param paramName="patientIDType" value="#[flowVars.patientIDType]"/>
+                <http:uri-param paramName="patientID" value="#[flowVars.patientID]"/>
+            </http:request-builder>
+        </http:request>
+        <http:request config-ref="Health_cloud_system_API" path="/patients/{patientIDType}/{patientID}/allergies" method="POST" doc:name="POST Allergies into SFDC">
+            <http:request-builder>
+                <http:uri-param paramName="patientIDType" value="#[flowVars.patientIDType]"/>
+                <http:uri-param paramName="patientID" value="#[flowVars.patientID]"/>
             </http:request-builder>
         </http:request>
     </sub-flow>

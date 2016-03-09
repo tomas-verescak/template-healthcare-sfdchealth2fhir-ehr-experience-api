@@ -28,11 +28,12 @@ http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/
     <scripting:script name="fhirConditionJSON" engine="Groovy" doc:name="Script"><![CDATA['[{"resourceType":"Condition","patient":{"reference":"patients/mrn/12345"},"code":{"coding":[{"code":"74400008","display":"Appendicitis","system":"http://snomed.info/sct"},{"code":"541","display":"Appendicitis","system":"http://hl7.org/fhir/sid/icd-9-cm"}],"text":"Appendicitis"},"category":{"coding":[{"code":"diagnosis","display":"Diagnosis","system":"http://hl7.org/fhir/condition-category"},{"code":"439401001","display":"Diagnosis","system":"http://snomed.info/sct"}]},"onsetDateTime":"1996-04-27"}]']]></scripting:script>
     <scripting:script name="fhirObservationJSON" engine="Groovy" doc:name="Script"><![CDATA['[{"resourceType":"Observation","subject":{"reference":"patients/mrn/12345"},"status":"preliminary","code":{"coding":[{"system":"Internal","code":"86021","display":""}]},"comments":"","description":"","effectiveDateTime":"2015-05-07"}]']]></scripting:script>
     <scripting:script name="fhirMedicationJSON" engine="Groovy" doc:name="Script"><![CDATA['[{"resourceType":"MedicationOrder","status":"active","patient":{"reference":"patients/mrn/12345"},"prescriber":{"reference":"practitioners/99999","display":"PROVIDER, NOT CONFIRMED"},"dosageInstruction":[{"text":"Take 3 mg by mouth Daily."},{"doseQuantity":{"value":"3","unit":"mg","system":"http://unitsofmeasure.org","code":"mg"}}],"medicationCodeableConcept":{"coding":[{"system":"Internal","code":"78064"},{"system":"RxNorm","code":"679314"}],"text":"PALIPERIDONE ER 3 MG TABLET,EXTENDED RELEASE 24 HR"}}]']]></scripting:script>
-    <munit:before-test name="new-test-suiteBefore_Test" description="Before tests actions">
+    <scripting:script name="fhirAllergyJSON" engine="Groovy" doc:name="Script"><![CDATA['[{"resourceType":"AllergyIntolerance","recordedDate":"2015-08-28","patient":{"reference":"patients/mrn/12345"},"reporter":{"reference":"practitioners/27166","display":"CHAO, LING"},"substance":{"coding":[{"code":"29217","system":"Internal"}],"text":"FENNEL (FOENICULUM VULGARE)"},"criticality":"CRITH","type":"allergy"},{"resourceType":"AllergyIntolerance","recordedDate":"2015-05-11","patient":{"reference":"patients/mrn/12345"},"reporter":{"reference":"practitioners/22614","display":"MARSH, KEITH"},"substance":{"coding":[{"code":"36824","system":"Internal"}],"text":"PEANUT"},"criticality":"CRITH","type":"allergy"},{"resourceType":"AllergyIntolerance","recordedDate":"2015-05-11","patient":{"reference":"patients/mrn/12345"},"reporter":{"reference":"practitioners/22614","display":"WRITER, AMANDA"},"substance":{"coding":[{"code":"25","system":"Internal"}],"text":"PENICILLINS"},"criticality":"CRITH","type":"allergy","reaction":[{"manifestation":{"text":"Itching"},"description":"Itching"},{"manifestation":{"text":"Rash"},"description":"Rash"}]},{"resourceType":"AllergyIntolerance","recordedDate":"2015-06-17","patient":{"reference":"patients/mrn/12345"},"reporter":{"reference":"practitioners/22614","display":"MARSH, KEITH"},"substance":{"coding":[{"code":"33302","system":"Internal"}],"text":"ACETAMINOPHEN"},"criticality":"CRITU","type":"intolerance","reaction":[{"manifestation":{"text":"Lightheadedness"},"description":"Lightheadedness"}]},{"resourceType":"AllergyIntolerance","recordedDate":"2015-06-17","patient":{"reference":"patients/mrn/12345"},"reporter":{"reference":"practitioners/22614","display":"WRITER, AMANDA"},"substance":{"coding":[{"code":"56535","system":"Internal"}],"text":"ANACIN-3 WITH CODEINE"},"criticality":"CRITU","type":"allergy","reaction":[{"manifestation":{"text":"Diarrhea"},"description":"Diarrhea"},{"manifestation":{"text":"Delirium"},"description":"Delirium"}]},{"resourceType":"AllergyIntolerance","recordedDate":"2015-05-11","patient":{"reference":"patients/mrn/12345"},"reporter":{"reference":"practitioners/22614","display":"ASTHANA, VIVEK"},"substance":{"coding":[{"code":"8891","system":"Internal"}],"text":"SHELLFISH DERIVED"},"criticality":"CRITU","type":"intolerance","reaction":[{"manifestation":{"text":"Nausea And Vomiting"},"description":"Nausea And Vomiting"},{"manifestation":{"text":"Rash"},"description":"Rash"}]}]']]></scripting:script>
+    <munit:before-test name="experience-api-test-Before_Test" description="Before tests actions">
         <set-variable variableName="patientID" value="#[12345]" doc:name="patientID"/>
         <set-variable variableName="patientIDType" value="mrn" doc:name="patientIDType"/>
     </munit:before-test>
-    <munit:test name="new-test-suite-post:/human/loadClinicalData:api-configTest" description="Test" >
+    <munit:test name="experience-api-test-post:/human/loadClinicalData:api-configTest" description="Test" >
         <mock:when messageProcessor=".*:.*" doc:name="Mock scatter-gather">
             <mock:with-attributes>
                 <mock:with-attribute name="doc:name" whereValue="#['Scatter-Gather']"/>
@@ -55,7 +56,7 @@ http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/
 <!--         <OBJECT-TO-STRING-TRANSFORMER DOC:NAME="OBJECT TO STRING"/> -->
 <!--         <MUNIT:ASSERT-true message="The HTTP Status code is not correct!" condition="#[messageInboundProperty('http.status').is(eq(200))]" doc:name="assert - http.status eq 200"/> -->
     </munit:test>
-    <munit:test name="new-test-suite-PatientTest" description="Test">
+    <munit:test name="experience-api-test-PatientTest" description="Test">
         <mock:spy messageProcessor=".*:.*" doc:name="Spy GET Patient">
             <mock:with-attributes>
                 <mock:with-attribute name="doc:name" whereValue="#['GET Patient']"/>
@@ -78,7 +79,7 @@ http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/
 
         <munit:assert-true message="The HTTP Status code is not correct!" condition="#[messageInboundProperty('http.status').is(eq(200))]" doc:name="assert - http.status eq 200"/>
     </munit:test>
-    <munit:test name="new-test-suite-ConditionTest" description="MUnit Test">
+    <munit:test name="experience-api-test-ConditionTest" description="MUnit Test">
         <mock:spy messageProcessor=".*:.*" doc:name="Spy GET Condition">
             <mock:with-attributes>
                 <mock:with-attribute name="doc:name" whereValue="#['GET Condition']"/>
@@ -97,7 +98,7 @@ http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/
         <flow-ref name="Condition" doc:name="call Condition flow"/>
         <munit:assert-true message="The HTTP Status code is not correct!" condition="#[messageInboundProperty('http.status').is(eq(200))]" doc:name="assert - http.status eq 200"/>
     </munit:test>
-    <munit:test name="new-test-suite-ObservationTest" description="MUnit Test">
+    <munit:test name="experience-api-test-ObservationTest" description="MUnit Test">
         <mock:spy doc:name="Spy GET Observation" messageProcessor=".*:.*">
             <mock:with-attributes>
                 <mock:with-attribute name="doc:name" whereValue="#['GET Observation']"/>
@@ -116,7 +117,7 @@ http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/
         <flow-ref name="Observation" doc:name="call Observation flow"/>
         <munit:assert-true message="The HTTP Status code is not correct!" condition="#[messageInboundProperty('http.status').is(eq(200))]" doc:name="assert - http.status eq 200"/>
     </munit:test>
-    <munit:test name="new-test-MedicationPrescriptionTest" description="MUnit Test">
+    <munit:test name="experience-api-test-MedicationPrescriptionTest" description="MUnit Test">
         <mock:spy doc:name="Spy GET MedicationPrescription" messageProcessor=".*:.*">
             <mock:with-attributes>
                 <mock:with-attribute name="doc:name" whereValue="#['GET MedicationPrescription']"/>
@@ -133,6 +134,25 @@ http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/
             <mock:then-return payload="#[&quot;success&quot;]" encoding="UTF-8" mimeType="application/json"/>
         </mock:when>
         <flow-ref name="MedicationPrescription" doc:name="call MedicationPrescription flow"/>
+        <munit:assert-true message="The HTTP Status code is not correct!" condition="#[messageInboundProperty('http.status').is(eq(200))]" doc:name="assert - http.status eq 200"/>
+    </munit:test>
+    <munit:test name="experience-api-test-AllergyIntoleranceTest" description="MUnit Test">
+        <mock:spy messageProcessor=".*:.*" doc:name="Spy">
+            <mock:with-attributes>
+                <mock:with-attribute name="doc:name" whereValue="#['GET AllergyIntolerance']"/>
+            </mock:with-attributes>
+            <mock:assertions-after-call>
+                <expression-component doc:name="Save output to flowVars.json"><![CDATA[flowVars.json = org.apache.commons.io.IOUtils.toString(payload, "UTF-8");]]></expression-component>
+                <munit:assert-on-equals message="The retrieved JSON should does not match expected value!" expectedValue="#[resultOfScript(&quot;fhirAllergyJSON&quot;).replaceAll(&quot;\\s+&quot;, &quot;&quot;)]" actualValue="#[flowVars.json.replaceAll(&quot;\\s&quot;, &quot;&quot;)]" doc:name="Verify contents of AllergyIntolerance response"/>
+            </mock:assertions-after-call>
+        </mock:spy>
+        <mock:when messageProcessor=".*:.*" doc:name="Mock POST Allergies">
+            <mock:with-attributes>
+                <mock:with-attribute name="doc:name" whereValue="#['POST Allergies into SFDC']"/>
+            </mock:with-attributes>
+            <mock:then-return payload="#[&quot;success&quot;]" encoding="UTF-8" mimeType="application/json"/>
+        </mock:when>
+        <flow-ref name="AllergyIntolerance" doc:name="call AllergyIntolerance flow"/>
         <munit:assert-true message="The HTTP Status code is not correct!" condition="#[messageInboundProperty('http.status').is(eq(200))]" doc:name="assert - http.status eq 200"/>
     </munit:test>
 
