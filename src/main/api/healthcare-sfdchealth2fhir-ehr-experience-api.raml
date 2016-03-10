@@ -2,6 +2,12 @@
 title: healthcare-sfdchealth2fhir-ehr-experience-api
 baseUri: http://healthcare-sfdchealth2fhir-ehr-experience-api.cloudhub.io/api
 version: v1
+securedBy: [basic]
+securitySchemes:
+ - basic:
+    description: |
+      This API supports Basic Authentication.
+    type: Basic Authentication
 /human/loadClinicalData:
   displayName: loadClinicalData
   post:
