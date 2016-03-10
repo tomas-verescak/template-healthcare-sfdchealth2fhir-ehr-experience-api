@@ -103,6 +103,7 @@ payload.patientIDType]]></dw:set-variable>
                 <flow-ref name="Condition" doc:name="Condition"/>
                 <flow-ref name="Observation" doc:name="Observation"/>
                 <flow-ref name="MedicationPrescription" doc:name="MedicationPrescription"/>
+                <flow-ref name="AllergyIntolerance" doc:name="AllergyIntolerance"/>
             </scatter-gather>
         </async>
         <logger message="The POST process has finished." level="INFO" doc:name="Log success"/>
