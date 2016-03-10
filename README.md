@@ -118,13 +118,26 @@ In order to use this Mule Anypoint Template you need to configure properties (Cr
 + anypoint.platform.client_secret `cloudhub_client_secret` 
 
 ####API calls configuration
-+ api.condition `link_to_condition_process_api`
-+ api.condition.port `8092` 
-+ api.observation `link_to_observation_process_api`
-+ api.observation.port `8092`
-+ api.medicationprescription `link_to_medication_process_api`
-+ api.medicationprescription.port `8092`
-+ api.patient `link_to_patient_process_api`
++ api.patient.host `patient_process_api_hostname`
++ api.patient.basepath `/api`
 + api.patient.port `8092`
-+ api.systemApi `link_to_ehr_system_api`
+
++ api.condition.host `condition_process_api_hostname`
++ api.condition.basepath `/api`
++ api.condition.port `8092` 
+
++ api.observation.host `observation_process_api_hostname`
++ api.observation.basepath `/api`
++ api.observation.port `8092`
+
++ api.medicationprescription.host `medication_process_api_hostname`
++ api.medicationprescription.basepath `/api`
++ api.medicationprescription.port `8092`
+
++ api.allergyIntolerance.host `allergyIntolerance_process_api_hostname`
++ api.allergyIntolerance.basepath `/api`
++ api.allergyIntolerance.port `8092`
+
++ api.systemApi.host `ehr_system_api_hostname`
++ api.systemApi.basepath `/api`
 + api.systemApi.port `80`

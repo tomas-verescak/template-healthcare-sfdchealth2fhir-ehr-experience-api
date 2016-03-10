@@ -1,19 +1,18 @@
 <metadata__cache__entry>
   <version>5.2.0.0</version>
-  <connectorName>Patient_API</connectorName>
+  <connectorName>HTTP_Request_Configuration</connectorName>
   <metadataIo class="tree-map">
     <entry>
-      <string>GET:/patients/{patientIDType}/{patientID}</string>
+      <string>POST:/human/loadClinicalData</string>
       <map>
         <entry>
           <string>__default__</string>
           <org.mule.tooling.metadata.cache.DefaultMetadataCacheEntry>
             <input class="org.mule.common.metadata.DefaultMetaData">
-              <payload class="org.mule.common.metadata.DefaultUnknownMetaDataModel">
-                <dataType>UNKNOWN</dataType>
-                <metaDataModelPropertiesManager>
-                  <properties/>
-                </metaDataModelPropertiesManager>
+              <payload class="org.mule.tooling.metadata.api.TypeRefMetaDataModel">
+                <connectorName>HTTP_Request_Configuration</connectorName>
+                <typeId>POST:/human/loadClinicalData_request</typeId>
+                <category>DEFAULT</category>
               </payload>
               <properties>
                 <entry>
@@ -50,8 +49,8 @@
             </input>
             <output class="org.mule.common.metadata.DefaultMetaData">
               <payload class="org.mule.tooling.metadata.api.TypeRefMetaDataModel">
-                <connectorName>Patient_API</connectorName>
-                <typeId>GET:/patients/{patientIDType}/{patientID}_response</typeId>
+                <connectorName>HTTP_Request_Configuration</connectorName>
+                <typeId>POST:/human/loadClinicalData_response</typeId>
                 <category>DEFAULT</category>
               </payload>
               <properties>

@@ -1,9 +1,9 @@
 <metadata__cache__entry>
   <version>5.2.0.0</version>
-  <connectorName>Condition_API</connectorName>
+  <connectorName>AllergyIntolerance_API</connectorName>
   <metadataIo class="tree-map">
     <entry>
-      <string>GET:/patients/{patientIDType}/{patientID}/conditions</string>
+      <string>GET:/patients/{patientIDType}/{patientID}/allergies</string>
       <map>
         <entry>
           <string>__default__</string>
@@ -17,13 +17,13 @@
               </payload>
               <properties>
                 <entry>
-                  <org.mule.common.metadata.MetaDataPropertyScope>SESSION</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataPropertyScope>FLOW</org.mule.common.metadata.MetaDataPropertyScope>
                   <org.mule.common.metadata.MetaDataProperties>
                     <fields/>
                   </org.mule.common.metadata.MetaDataProperties>
                 </entry>
                 <entry>
-                  <org.mule.common.metadata.MetaDataPropertyScope>FLOW</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataPropertyScope>SESSION</org.mule.common.metadata.MetaDataPropertyScope>
                   <org.mule.common.metadata.MetaDataProperties>
                     <fields/>
                   </org.mule.common.metadata.MetaDataProperties>
@@ -62,6 +62,34 @@
                   <fields>
                     <org.mule.common.metadata.DefaultMetaDataField>
                       <name>resourceType</name>
+                      <model class="org.mule.common.metadata.DefaultSimpleMetaDataModel">
+                        <dataType>STRING</dataType>
+                        <metaDataModelPropertiesManager>
+                          <properties/>
+                        </metaDataModelPropertiesManager>
+                      </model>
+                      <accessType>READ_WRITE</accessType>
+                      <metaDataFieldPropertyManager>
+                        <properties>
+                          <org.mule.common.metadata.field.property.dsql.DsqlSelectMetaDataFieldProperty/>
+                          <org.mule.common.metadata.field.property.dsql.DsqlWhereMetaDataFieldProperty/>
+                          <org.mule.common.metadata.field.property.dsql.DsqlOrderMetaDataFieldProperty/>
+                          <org.mule.common.metadata.field.property.dsql.DsqlQueryOperatorsMetaDataFieldProperty>
+                            <supportedOperators>
+                              <org.mule.common.query.expression.LessOperator/>
+                              <org.mule.common.query.expression.LessOrEqualsOperator/>
+                              <org.mule.common.query.expression.EqualsOperator/>
+                              <org.mule.common.query.expression.GreaterOperator/>
+                              <org.mule.common.query.expression.GreaterOrEqualsOperator/>
+                              <org.mule.common.query.expression.NotEqualsOperator/>
+                              <org.mule.common.query.expression.LikeOperator/>
+                            </supportedOperators>
+                          </org.mule.common.metadata.field.property.dsql.DsqlQueryOperatorsMetaDataFieldProperty>
+                        </properties>
+                      </metaDataFieldPropertyManager>
+                    </org.mule.common.metadata.DefaultMetaDataField>
+                    <org.mule.common.metadata.DefaultMetaDataField>
+                      <name>recordedDate</name>
                       <model class="org.mule.common.metadata.DefaultSimpleMetaDataModel">
                         <dataType>STRING</dataType>
                         <metaDataModelPropertiesManager>
@@ -139,7 +167,85 @@
                       </metaDataFieldPropertyManager>
                     </org.mule.common.metadata.DefaultMetaDataField>
                     <org.mule.common.metadata.DefaultMetaDataField>
-                      <name>code</name>
+                      <name>reporter</name>
+                      <model class="org.mule.common.metadata.DefaultStructuredMetadataModel">
+                        <dataType>JSON</dataType>
+                        <metaDataModelPropertiesManager>
+                          <properties/>
+                        </metaDataModelPropertiesManager>
+                        <fields>
+                          <org.mule.common.metadata.DefaultMetaDataField>
+                            <name>reference</name>
+                            <model class="org.mule.common.metadata.DefaultSimpleMetaDataModel">
+                              <dataType>STRING</dataType>
+                              <metaDataModelPropertiesManager>
+                                <properties/>
+                              </metaDataModelPropertiesManager>
+                            </model>
+                            <accessType>READ_WRITE</accessType>
+                            <metaDataFieldPropertyManager>
+                              <properties>
+                                <org.mule.common.metadata.field.property.dsql.DsqlSelectMetaDataFieldProperty/>
+                                <org.mule.common.metadata.field.property.dsql.DsqlWhereMetaDataFieldProperty/>
+                                <org.mule.common.metadata.field.property.dsql.DsqlOrderMetaDataFieldProperty/>
+                                <org.mule.common.metadata.field.property.dsql.DsqlQueryOperatorsMetaDataFieldProperty>
+                                  <supportedOperators>
+                                    <org.mule.common.query.expression.LessOperator/>
+                                    <org.mule.common.query.expression.LessOrEqualsOperator/>
+                                    <org.mule.common.query.expression.EqualsOperator/>
+                                    <org.mule.common.query.expression.GreaterOperator/>
+                                    <org.mule.common.query.expression.GreaterOrEqualsOperator/>
+                                    <org.mule.common.query.expression.NotEqualsOperator/>
+                                    <org.mule.common.query.expression.LikeOperator/>
+                                  </supportedOperators>
+                                </org.mule.common.metadata.field.property.dsql.DsqlQueryOperatorsMetaDataFieldProperty>
+                              </properties>
+                            </metaDataFieldPropertyManager>
+                          </org.mule.common.metadata.DefaultMetaDataField>
+                          <org.mule.common.metadata.DefaultMetaDataField>
+                            <name>display</name>
+                            <model class="org.mule.common.metadata.DefaultSimpleMetaDataModel">
+                              <dataType>STRING</dataType>
+                              <metaDataModelPropertiesManager>
+                                <properties/>
+                              </metaDataModelPropertiesManager>
+                            </model>
+                            <accessType>READ_WRITE</accessType>
+                            <metaDataFieldPropertyManager>
+                              <properties>
+                                <org.mule.common.metadata.field.property.dsql.DsqlSelectMetaDataFieldProperty/>
+                                <org.mule.common.metadata.field.property.dsql.DsqlWhereMetaDataFieldProperty/>
+                                <org.mule.common.metadata.field.property.dsql.DsqlOrderMetaDataFieldProperty/>
+                                <org.mule.common.metadata.field.property.dsql.DsqlQueryOperatorsMetaDataFieldProperty>
+                                  <supportedOperators>
+                                    <org.mule.common.query.expression.LessOperator/>
+                                    <org.mule.common.query.expression.LessOrEqualsOperator/>
+                                    <org.mule.common.query.expression.EqualsOperator/>
+                                    <org.mule.common.query.expression.GreaterOperator/>
+                                    <org.mule.common.query.expression.GreaterOrEqualsOperator/>
+                                    <org.mule.common.query.expression.NotEqualsOperator/>
+                                    <org.mule.common.query.expression.LikeOperator/>
+                                  </supportedOperators>
+                                </org.mule.common.metadata.field.property.dsql.DsqlQueryOperatorsMetaDataFieldProperty>
+                              </properties>
+                            </metaDataFieldPropertyManager>
+                          </org.mule.common.metadata.DefaultMetaDataField>
+                        </fields>
+                      </model>
+                      <accessType>READ_WRITE</accessType>
+                      <metaDataFieldPropertyManager>
+                        <properties>
+                          <org.mule.common.metadata.field.property.dsql.DsqlSelectMetaDataFieldProperty/>
+                          <org.mule.common.metadata.field.property.dsql.DsqlWhereMetaDataFieldProperty/>
+                          <org.mule.common.metadata.field.property.dsql.DsqlOrderMetaDataFieldProperty/>
+                          <org.mule.common.metadata.field.property.dsql.DsqlQueryOperatorsMetaDataFieldProperty>
+                            <supportedOperators/>
+                          </org.mule.common.metadata.field.property.dsql.DsqlQueryOperatorsMetaDataFieldProperty>
+                        </properties>
+                      </metaDataFieldPropertyManager>
+                    </org.mule.common.metadata.DefaultMetaDataField>
+                    <org.mule.common.metadata.DefaultMetaDataField>
+                      <name>substance</name>
                       <model class="org.mule.common.metadata.DefaultStructuredMetadataModel">
                         <dataType>JSON</dataType>
                         <metaDataModelPropertiesManager>
@@ -161,34 +267,6 @@
                                 <fields>
                                   <org.mule.common.metadata.DefaultMetaDataField>
                                     <name>code</name>
-                                    <model class="org.mule.common.metadata.DefaultSimpleMetaDataModel">
-                                      <dataType>STRING</dataType>
-                                      <metaDataModelPropertiesManager>
-                                        <properties/>
-                                      </metaDataModelPropertiesManager>
-                                    </model>
-                                    <accessType>READ_WRITE</accessType>
-                                    <metaDataFieldPropertyManager>
-                                      <properties>
-                                        <org.mule.common.metadata.field.property.dsql.DsqlSelectMetaDataFieldProperty/>
-                                        <org.mule.common.metadata.field.property.dsql.DsqlWhereMetaDataFieldProperty/>
-                                        <org.mule.common.metadata.field.property.dsql.DsqlOrderMetaDataFieldProperty/>
-                                        <org.mule.common.metadata.field.property.dsql.DsqlQueryOperatorsMetaDataFieldProperty>
-                                          <supportedOperators>
-                                            <org.mule.common.query.expression.LessOperator/>
-                                            <org.mule.common.query.expression.LessOrEqualsOperator/>
-                                            <org.mule.common.query.expression.EqualsOperator/>
-                                            <org.mule.common.query.expression.GreaterOperator/>
-                                            <org.mule.common.query.expression.GreaterOrEqualsOperator/>
-                                            <org.mule.common.query.expression.NotEqualsOperator/>
-                                            <org.mule.common.query.expression.LikeOperator/>
-                                          </supportedOperators>
-                                        </org.mule.common.metadata.field.property.dsql.DsqlQueryOperatorsMetaDataFieldProperty>
-                                      </properties>
-                                    </metaDataFieldPropertyManager>
-                                  </org.mule.common.metadata.DefaultMetaDataField>
-                                  <org.mule.common.metadata.DefaultMetaDataField>
-                                    <name>display</name>
                                     <model class="org.mule.common.metadata.DefaultSimpleMetaDataModel">
                                       <dataType>STRING</dataType>
                                       <metaDataModelPropertiesManager>
@@ -302,127 +380,12 @@
                       </metaDataFieldPropertyManager>
                     </org.mule.common.metadata.DefaultMetaDataField>
                     <org.mule.common.metadata.DefaultMetaDataField>
-                      <name>category</name>
-                      <model class="org.mule.common.metadata.DefaultStructuredMetadataModel">
-                        <dataType>JSON</dataType>
+                      <name>criticality</name>
+                      <model class="org.mule.common.metadata.DefaultSimpleMetaDataModel">
+                        <dataType>STRING</dataType>
                         <metaDataModelPropertiesManager>
                           <properties/>
                         </metaDataModelPropertiesManager>
-                        <fields>
-                          <org.mule.common.metadata.DefaultMetaDataField>
-                            <name>coding</name>
-                            <model class="org.mule.common.metadata.DefaultListMetaDataModel">
-                              <dataType>LIST</dataType>
-                              <metaDataModelPropertiesManager>
-                                <properties/>
-                              </metaDataModelPropertiesManager>
-                              <model class="org.mule.common.metadata.DefaultStructuredMetadataModel">
-                                <dataType>JSON</dataType>
-                                <metaDataModelPropertiesManager>
-                                  <properties/>
-                                </metaDataModelPropertiesManager>
-                                <fields>
-                                  <org.mule.common.metadata.DefaultMetaDataField>
-                                    <name>code</name>
-                                    <model class="org.mule.common.metadata.DefaultSimpleMetaDataModel">
-                                      <dataType>STRING</dataType>
-                                      <metaDataModelPropertiesManager>
-                                        <properties/>
-                                      </metaDataModelPropertiesManager>
-                                    </model>
-                                    <accessType>READ_WRITE</accessType>
-                                    <metaDataFieldPropertyManager>
-                                      <properties>
-                                        <org.mule.common.metadata.field.property.dsql.DsqlSelectMetaDataFieldProperty/>
-                                        <org.mule.common.metadata.field.property.dsql.DsqlWhereMetaDataFieldProperty/>
-                                        <org.mule.common.metadata.field.property.dsql.DsqlOrderMetaDataFieldProperty/>
-                                        <org.mule.common.metadata.field.property.dsql.DsqlQueryOperatorsMetaDataFieldProperty>
-                                          <supportedOperators>
-                                            <org.mule.common.query.expression.LessOperator/>
-                                            <org.mule.common.query.expression.LessOrEqualsOperator/>
-                                            <org.mule.common.query.expression.EqualsOperator/>
-                                            <org.mule.common.query.expression.GreaterOperator/>
-                                            <org.mule.common.query.expression.GreaterOrEqualsOperator/>
-                                            <org.mule.common.query.expression.NotEqualsOperator/>
-                                            <org.mule.common.query.expression.LikeOperator/>
-                                          </supportedOperators>
-                                        </org.mule.common.metadata.field.property.dsql.DsqlQueryOperatorsMetaDataFieldProperty>
-                                      </properties>
-                                    </metaDataFieldPropertyManager>
-                                  </org.mule.common.metadata.DefaultMetaDataField>
-                                  <org.mule.common.metadata.DefaultMetaDataField>
-                                    <name>display</name>
-                                    <model class="org.mule.common.metadata.DefaultSimpleMetaDataModel">
-                                      <dataType>STRING</dataType>
-                                      <metaDataModelPropertiesManager>
-                                        <properties/>
-                                      </metaDataModelPropertiesManager>
-                                    </model>
-                                    <accessType>READ_WRITE</accessType>
-                                    <metaDataFieldPropertyManager>
-                                      <properties>
-                                        <org.mule.common.metadata.field.property.dsql.DsqlSelectMetaDataFieldProperty/>
-                                        <org.mule.common.metadata.field.property.dsql.DsqlWhereMetaDataFieldProperty/>
-                                        <org.mule.common.metadata.field.property.dsql.DsqlOrderMetaDataFieldProperty/>
-                                        <org.mule.common.metadata.field.property.dsql.DsqlQueryOperatorsMetaDataFieldProperty>
-                                          <supportedOperators>
-                                            <org.mule.common.query.expression.LessOperator/>
-                                            <org.mule.common.query.expression.LessOrEqualsOperator/>
-                                            <org.mule.common.query.expression.EqualsOperator/>
-                                            <org.mule.common.query.expression.GreaterOperator/>
-                                            <org.mule.common.query.expression.GreaterOrEqualsOperator/>
-                                            <org.mule.common.query.expression.NotEqualsOperator/>
-                                            <org.mule.common.query.expression.LikeOperator/>
-                                          </supportedOperators>
-                                        </org.mule.common.metadata.field.property.dsql.DsqlQueryOperatorsMetaDataFieldProperty>
-                                      </properties>
-                                    </metaDataFieldPropertyManager>
-                                  </org.mule.common.metadata.DefaultMetaDataField>
-                                  <org.mule.common.metadata.DefaultMetaDataField>
-                                    <name>system</name>
-                                    <model class="org.mule.common.metadata.DefaultSimpleMetaDataModel">
-                                      <dataType>STRING</dataType>
-                                      <metaDataModelPropertiesManager>
-                                        <properties/>
-                                      </metaDataModelPropertiesManager>
-                                    </model>
-                                    <accessType>READ_WRITE</accessType>
-                                    <metaDataFieldPropertyManager>
-                                      <properties>
-                                        <org.mule.common.metadata.field.property.dsql.DsqlSelectMetaDataFieldProperty/>
-                                        <org.mule.common.metadata.field.property.dsql.DsqlWhereMetaDataFieldProperty/>
-                                        <org.mule.common.metadata.field.property.dsql.DsqlOrderMetaDataFieldProperty/>
-                                        <org.mule.common.metadata.field.property.dsql.DsqlQueryOperatorsMetaDataFieldProperty>
-                                          <supportedOperators>
-                                            <org.mule.common.query.expression.LessOperator/>
-                                            <org.mule.common.query.expression.LessOrEqualsOperator/>
-                                            <org.mule.common.query.expression.EqualsOperator/>
-                                            <org.mule.common.query.expression.GreaterOperator/>
-                                            <org.mule.common.query.expression.GreaterOrEqualsOperator/>
-                                            <org.mule.common.query.expression.NotEqualsOperator/>
-                                            <org.mule.common.query.expression.LikeOperator/>
-                                          </supportedOperators>
-                                        </org.mule.common.metadata.field.property.dsql.DsqlQueryOperatorsMetaDataFieldProperty>
-                                      </properties>
-                                    </metaDataFieldPropertyManager>
-                                  </org.mule.common.metadata.DefaultMetaDataField>
-                                </fields>
-                              </model>
-                              <isArray>false</isArray>
-                            </model>
-                            <accessType>READ_WRITE</accessType>
-                            <metaDataFieldPropertyManager>
-                              <properties>
-                                <org.mule.common.metadata.field.property.dsql.DsqlSelectMetaDataFieldProperty/>
-                                <org.mule.common.metadata.field.property.dsql.DsqlWhereMetaDataFieldProperty/>
-                                <org.mule.common.metadata.field.property.dsql.DsqlOrderMetaDataFieldProperty/>
-                                <org.mule.common.metadata.field.property.dsql.DsqlQueryOperatorsMetaDataFieldProperty>
-                                  <supportedOperators/>
-                                </org.mule.common.metadata.field.property.dsql.DsqlQueryOperatorsMetaDataFieldProperty>
-                              </properties>
-                            </metaDataFieldPropertyManager>
-                          </org.mule.common.metadata.DefaultMetaDataField>
-                        </fields>
                       </model>
                       <accessType>READ_WRITE</accessType>
                       <metaDataFieldPropertyManager>
@@ -431,13 +394,21 @@
                           <org.mule.common.metadata.field.property.dsql.DsqlWhereMetaDataFieldProperty/>
                           <org.mule.common.metadata.field.property.dsql.DsqlOrderMetaDataFieldProperty/>
                           <org.mule.common.metadata.field.property.dsql.DsqlQueryOperatorsMetaDataFieldProperty>
-                            <supportedOperators/>
+                            <supportedOperators>
+                              <org.mule.common.query.expression.LessOperator/>
+                              <org.mule.common.query.expression.LessOrEqualsOperator/>
+                              <org.mule.common.query.expression.EqualsOperator/>
+                              <org.mule.common.query.expression.GreaterOperator/>
+                              <org.mule.common.query.expression.GreaterOrEqualsOperator/>
+                              <org.mule.common.query.expression.NotEqualsOperator/>
+                              <org.mule.common.query.expression.LikeOperator/>
+                            </supportedOperators>
                           </org.mule.common.metadata.field.property.dsql.DsqlQueryOperatorsMetaDataFieldProperty>
                         </properties>
                       </metaDataFieldPropertyManager>
                     </org.mule.common.metadata.DefaultMetaDataField>
                     <org.mule.common.metadata.DefaultMetaDataField>
-                      <name>onsetDateTime</name>
+                      <name>type</name>
                       <model class="org.mule.common.metadata.DefaultSimpleMetaDataModel">
                         <dataType>STRING</dataType>
                         <metaDataModelPropertiesManager>
@@ -470,13 +441,13 @@
               </payload>
               <properties>
                 <entry>
-                  <org.mule.common.metadata.MetaDataPropertyScope>SESSION</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataPropertyScope>FLOW</org.mule.common.metadata.MetaDataPropertyScope>
                   <org.mule.common.metadata.MetaDataProperties>
                     <fields/>
                   </org.mule.common.metadata.MetaDataProperties>
                 </entry>
                 <entry>
-                  <org.mule.common.metadata.MetaDataPropertyScope>FLOW</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataPropertyScope>SESSION</org.mule.common.metadata.MetaDataPropertyScope>
                   <org.mule.common.metadata.MetaDataProperties>
                     <fields/>
                   </org.mule.common.metadata.MetaDataProperties>

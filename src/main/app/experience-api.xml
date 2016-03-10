@@ -25,46 +25,59 @@ http://www.mulesoft.org/schema/mule/api-platform-gw http://www.mulesoft.org/sche
 http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd" >
 
 	<context:property-placeholder location="common.properties, mule.${mule.env}.properties"/>
+    
     <http:listener-config name="api-httpListenerConfig" host="0.0.0.0" port="${https.port}" doc:name="HTTP Listener Configuration" protocol="HTTPS">
         <tls:context>
-            <tls:key-store type="jks" path="${keystore.location}" alias="${key.alias}" keyPassword="${key.password}" password="${keystore.password}"/>
+            <tls:key-store type="jks" path="${keystore.location}" alias="${key.alias}" keyPassword="${keystore.password}" password="${key.password}"/>
         </tls:context>
+
     </http:listener-config>
     
-    <api-platform-gw:api id="${api.id}" apiName="${api.name}" version="${api.version}" flowRef="api-main" doc:name="API Autodiscovery"></api-platform-gw:api>
+<!--     <api-platform-gw:api id="${api.id}" apiName="${api.name}" version="${api.version}" flowRef="api-main" doc:name="API Autodiscovery"></api-platform-gw:api> -->
         
     <apikit:config name="api-config" raml="healthcare-sfdchealth2fhir-ehr-experience-api.raml" consoleEnabled="true" consolePath="console" doc:name="Router">
         <apikit:flow-mapping resource="/human/loadClinicalData" action="post" flow-ref="post:/human/loadClinicalData:api-config"/>
 
+
     </apikit:config>
-    <http:request-config name="Patient_API" host="${api.patient}" port="${api.patient.port}" doc:name="HTTP Request Configuration" protocol="HTTPS" basePath="/api">
+    <http:request-config name="Patient_API" host="${api.patient.host}" port="${api.patient.port}" doc:name="HTTP Request Configuration" protocol="HTTPS" basePath="${api.patient.basepath}">
         <tls:context>
             <tls:trust-store path="${truststore.location}" password="${truststore.password}" type="jks"/>
       </tls:context>
         <http:raml-api-configuration location="healthcare-ehr2fhir-patient-process-api.raml"/>
+
     </http:request-config>
-    <http:request-config name="Observation_API" host="${api.observation}" port="${api.observation.port}" doc:name="HTTP Request Configuration" basePath="/api" protocol="HTTPS">
+    <http:request-config name="Observation_API" host="${api.observation.host}" port="${api.observation.port}" doc:name="HTTP Request Configuration" basePath="${api.observation.basepath}" protocol="HTTPS">
         <tls:context>
             <tls:trust-store path="${truststore.location}" password="${truststore.password}" type="jks"/>
       </tls:context>
         <http:raml-api-configuration location="healthcare-ehr2fhir-observation-process-api.raml"/>
+
 	</http:request-config>
-    <http:request-config name="Condition_API" host="${api.condition}" port="${api.condition.port}" doc:name="HTTP Request Configuration" basePath="/api" protocol="HTTPS">
+    <http:request-config name="Condition_API" host="${api.condition.host}" port="${api.condition.port}" doc:name="HTTP Request Configuration" basePath="${api.condition.basepath}" protocol="HTTPS">
     	<tls:context>
             <tls:trust-store path="${truststore.location}" password="${truststore.password}" type="jks"/>
       </tls:context>
-      <http:raml-api-configuration location="healthcare-ehr2fhir-condition-process-api.raml"/>
+        <http:raml-api-configuration location="healthcare-ehr2fhir-condition-process-api.raml"/>
+
     </http:request-config>
 
-    <http:request-config name="MedicationPrescription_API" host="${api.medicationprescription}" port="${api.medicationprescription.port}"  doc:name="HTTP Request Configuration" basePath="/api" protocol="HTTPS">
+    <http:request-config name="MedicationPrescription_API" host="${api.medicationprescription.host}" port="${api.medicationprescription.port}"  doc:name="HTTP Request Configuration" basePath="${api.medicationprescription.basepath}" protocol="HTTPS">
          <tls:context>
             <tls:trust-store path="${truststore.location}" password="${truststore.password}" type="jks"/>
       </tls:context>
-        <http:raml-api-configuration location="healthcare-ehr2fhir-medication-process-api.raml"/>   
+        <http:raml-api-configuration location="healthcare-ehr2fhir-medication-process-api.raml"/>
+   
     </http:request-config>
-    <http:request-config name="Health_cloud_system_API" host="${api.systemApi}" port="${api.systemApi.port}" basePath="/api" doc:name="HTTP Request Configuration">
+    <http:request-config name="Health_cloud_system_API" host="${api.systemApi.host}" port="${api.systemApi.port}" basePath="${api.systemApi.basepath}" doc:name="HTTP Request Configuration">
         <http:raml-api-configuration location="healthcare-fhir2sfdchealth-ehr-system-api.raml"/>
 
+    </http:request-config>
+    <http:request-config name="AllergyIntolerance_API" protocol="HTTPS" host="${api.allergyIntolerance.host}" port="${api.allergyIntolerance.port}" basePath="${api.allergyIntolerance.basepath}" doc:name="HTTP Request Configuration">
+        <tls:context>
+            <tls:trust-store path="${truststore.location}" password="${truststore.password}" type="jks"/>
+        </tls:context>
+        <http:raml-api-configuration location="healthcare-ehr2fhir-allergyintolerance-process-api.raml"/>
     </http:request-config>
     <flow name="api-main">
         <http:listener config-ref="api-httpListenerConfig" path="/api/*" doc:name="HTTP"/>
@@ -72,7 +85,7 @@ http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/
         <exception-strategy ref="api-apiKitGlobalExceptionMapping" doc:name="Reference Exception Strategy"/>
     </flow>
 
-     <flow name="post:/human/loadClinicalData:api-config">
+     <flow name="post:/human/loadClinicalData:api-config"  >
         <json:json-to-object-transformer doc:name="JSON to Object"/>
         <dw:transform-message doc:name="Set patientIDType and patientID variables">
             <dw:set-variable variableName="patientID"><![CDATA[%dw 1.0
@@ -84,47 +97,53 @@ payload.patientID]]></dw:set-variable>
 ---
 payload.patientIDType]]></dw:set-variable>
         </dw:transform-message>
-        <async processingStrategy="API Autodiscovery" doc:name="Async">
+        <async doc:name="Async">
             <scatter-gather doc:name="Scatter-Gather">
-                <flow-ref name="loadClinicalDataSub_Flow" doc:name="Call loadClinicalDataSub_Flow"/>
-                <flow-ref name="loadClinicalDataSub_Flow_Condition" doc:name="Call loadClinicalDataSub_Flow_Condition"/>
-                <flow-ref name="loadClinicalDataSub_Flow_Observation" doc:name="Call loadClinicalDataSub_Flow_Observation"/>
-                <flow-ref name="loadClinicalDataSub_MedicationPrescription" doc:name="Call loadClinicalDataSub_Flow_MedicationPrescription"/>
+                <flow-ref name="Patient" doc:name="Patient"/>
+                <flow-ref name="Condition" doc:name="Condition"/>
+                <flow-ref name="Observation" doc:name="Observation"/>
+                <flow-ref name="MedicationPrescription" doc:name="MedicationPrescription"/>
             </scatter-gather>
         </async>
-
-        <logger message="The POST process has finished." level="INFO" doc:name="Log the success"/>
+        <logger message="The POST process has finished." level="INFO" doc:name="Log success"/>
         <dw:transform-message doc:name="Create response JSON">
             <dw:set-payload><![CDATA[%dw 1.0
 %output application/json
 ---
 {"message": "The POST process has finished."}]]></dw:set-payload>
         </dw:transform-message>
+
     </flow>
-    <sub-flow name="loadClinicalDataSub_Flow">
+    <sub-flow name="Patient">
+
 
         <http:request config-ref="Patient_API" path="/patients/{patientIDType}/{patientID}" method="GET" doc:name="GET Patient">
             <http:request-builder>
                 <http:uri-param paramName="patientID" value="#[flowVars.patientID]"/>
                 <http:uri-param paramName="patientIDType" value="#[flowVars.patientIDType]"/>
 
+
             </http:request-builder>
         </http:request>
+
 
         <http:request config-ref="Health_cloud_system_API" path="/patients/{patientIDType}/{patientID}" method="PUT" doc:name="PUT Patient into SFDC">
             <http:request-builder>
                 <http:uri-param paramName="patientID" value="#[flowVars.patientID]"/>
                 <http:uri-param paramName="patientIDType" value="#[flowVars.patientIDType]"/>
 
+
             </http:request-builder>
         </http:request>
     </sub-flow>
-    <sub-flow name="loadClinicalDataSub_Flow_Condition">
+    <sub-flow name="Condition">
+
 
         <http:request config-ref="Condition_API" path="/patients/{patientIDType}/{patientID}/conditions" method="GET" doc:name="GET Condition">
             <http:request-builder>
                 <http:uri-param paramName="patientID" value="#[flowVars.patientID]"/>
                 <http:uri-param paramName="patientIDType" value="#[flowVars.patientIDType]"/>
+
 
             </http:request-builder>
         </http:request>
@@ -137,7 +156,8 @@ payload.patientIDType]]></dw:set-variable>
             </http:request-builder>
         </http:request>
     </sub-flow>
-    <sub-flow name="loadClinicalDataSub_Flow_Observation">
+    <sub-flow name="Observation">
+
 
         <http:request config-ref="Observation_API" path="/patients/{patientIDType}/{patientID}/observations" method="GET" doc:name="GET Observation">
             <http:request-builder>
@@ -155,12 +175,14 @@ payload.patientIDType]]></dw:set-variable>
             </http:request-builder>
         </http:request>
     </sub-flow>
-    <sub-flow name="loadClinicalDataSub_MedicationPrescription">
+    <sub-flow name="MedicationPrescription">
+
 
         <http:request config-ref="MedicationPrescription_API" path="/patients/{patientIDType}/{patientID}/medicationorders" method="GET" doc:name="GET MedicationPrescription">
             <http:request-builder>
                 <http:uri-param paramName="patientID" value="#[flowVars.patientID]"/>
                 <http:uri-param paramName="patientIDType" value="#[flowVars.patientIDType]"/>
+
 
             </http:request-builder>
         </http:request>
@@ -170,6 +192,21 @@ payload.patientIDType]]></dw:set-variable>
                 <http:uri-param paramName="patientIDType" value="#[flowVars.patientIDType]"/>
                 <http:uri-param paramName="patientID" value="#[flowVars.patientID]"/>
 
+
+            </http:request-builder>
+        </http:request>
+    </sub-flow>
+    <sub-flow name="AllergyIntolerance">
+        <http:request config-ref="AllergyIntolerance_API" path="/patients/{patientIDType}/{patientID}/allergies" method="GET" doc:name="GET AllergyIntolerance">
+            <http:request-builder>
+                <http:uri-param paramName="patientIDType" value="#[flowVars.patientIDType]"/>
+                <http:uri-param paramName="patientID" value="#[flowVars.patientID]"/>
+            </http:request-builder>
+        </http:request>
+        <http:request config-ref="Health_cloud_system_API" path="/patients/{patientIDType}/{patientID}/allergies" method="POST" doc:name="POST Allergies into SFDC">
+            <http:request-builder>
+                <http:uri-param paramName="patientIDType" value="#[flowVars.patientIDType]"/>
+                <http:uri-param paramName="patientID" value="#[flowVars.patientID]"/>
             </http:request-builder>
         </http:request>
     </sub-flow>

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:tls="http://www.mulesoft.org/schema/mule/tls" xmlns:synchronize="http://www.mulesoft.org/schema/mule/synchronize" xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" xmlns:mock="http://www.mulesoft.org/schema/mule/mock" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:dw="http://www.mulesoft.org/schema/mule/ee/dw" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:core="http://www.mulesoft.org/schema/mule/core" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-current.xsd
+http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee/dw/current/dw.xsd
+http://www.mulesoft.org/schema/mule/mock http://www.mulesoft.org/schema/mule/mock/current/mule-mock.xsd
+http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd
+http://www.mulesoft.org/schema/mule/synchronize http://www.mulesoft.org/schema/mule/synchronize/current/mule-synchronize.xsd
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd">
+
+	<context:property-placeholder location="mule.test.properties"/>
+	
+    <munit:config name="munit" doc:name="MUnit configuration" mock-connectors="false" mock-inbounds="false"/>
+    <spring:beans>
+        <spring:import resource="classpath:experience-api.xml"/>
+    </spring:beans>
+    <http:request-config name="HTTP_Request_Configuration" host="0.0.0.0" port="${https.port}" basePath="/api" doc:name="HTTP Request Configuration" protocol="HTTPS">
+        <tls:context>
+            <tls:trust-store path="${truststore.location}" password="${truststore.password}" type="jks"/>
+        </tls:context>
+        <http:raml-api-configuration location="healthcare-sfdchealth2fhir-ehr-experience-api.raml"/>
+    </http:request-config>
+    <scripting:script name="fhirPatientJSON" engine="Groovy" doc:name="Script"><![CDATA['{"resourceType":"Patient","id":"patients/mrn/12345","name":{"use":"official","family":["Radonctest"],"given":["Andy"],"prefix":[""],"suffix":[""]},"telecom":[{"system":"phone","value":"608-999-9654","use":"home"}],"gender":"male","birthDate":"1970-02-12","address":[{"resourceType":"Address","line":["1855 Folsom Street"],"city":"San Francisco","district":"DANE","state":"Wisconsin","postalCode":"53703","country":"United States of America"}]}']]></scripting:script>
+    <scripting:script name="fhirConditionJSON" engine="Groovy" doc:name="Script"><![CDATA['[{"resourceType":"Condition","patient":{"reference":"patients/mrn/12345"},"code":{"coding":[{"code":"74400008","display":"Appendicitis","system":"http://snomed.info/sct"},{"code":"541","display":"Appendicitis","system":"http://hl7.org/fhir/sid/icd-9-cm"}],"text":"Appendicitis"},"category":{"coding":[{"code":"diagnosis","display":"Diagnosis","system":"http://hl7.org/fhir/condition-category"},{"code":"439401001","display":"Diagnosis","system":"http://snomed.info/sct"}]},"onsetDateTime":"1996-04-27"}]']]></scripting:script>
+    <scripting:script name="fhirObservationJSON" engine="Groovy" doc:name="Script"><![CDATA['[{"resourceType":"Observation","subject":{"reference":"patients/mrn/12345"},"status":"preliminary","code":{"coding":[{"system":"Internal","code":"86021","display":""}]},"comments":"","description":"","effectiveDateTime":"2015-05-07"}]']]></scripting:script>
+    <scripting:script name="fhirMedicationJSON" engine="Groovy" doc:name="Script"><![CDATA['[{"resourceType":"MedicationOrder","status":"active","patient":{"reference":"patients/mrn/12345"},"prescriber":{"reference":"practitioners/99999","display":"PROVIDER, NOT CONFIRMED"},"dosageInstruction":[{"text":"Take 3 mg by mouth Daily."},{"doseQuantity":{"value":"3","unit":"mg","system":"http://unitsofmeasure.org","code":"mg"}}],"medicationCodeableConcept":{"coding":[{"system":"Internal","code":"78064"},{"system":"RxNorm","code":"679314"}],"text":"PALIPERIDONE ER 3 MG TABLET,EXTENDED RELEASE 24 HR"}}]']]></scripting:script>
+    <scripting:script name="fhirAllergyJSON" engine="Groovy" doc:name="Script"><![CDATA['[{"resourceType":"AllergyIntolerance","recordedDate":"2015-08-28","patient":{"reference":"patients/mrn/12345"},"reporter":{"reference":"practitioners/27166","display":"CHAO, LING"},"substance":{"coding":[{"code":"29217","system":"Internal"}],"text":"FENNEL (FOENICULUM VULGARE)"},"criticality":"CRITH","type":"allergy"},{"resourceType":"AllergyIntolerance","recordedDate":"2015-05-11","patient":{"reference":"patients/mrn/12345"},"reporter":{"reference":"practitioners/22614","display":"MARSH, KEITH"},"substance":{"coding":[{"code":"36824","system":"Internal"}],"text":"PEANUT"},"criticality":"CRITH","type":"allergy"},{"resourceType":"AllergyIntolerance","recordedDate":"2015-05-11","patient":{"reference":"patients/mrn/12345"},"reporter":{"reference":"practitioners/22614","display":"WRITER, AMANDA"},"substance":{"coding":[{"code":"25","system":"Internal"}],"text":"PENICILLINS"},"criticality":"CRITH","type":"allergy","reaction":[{"manifestation":{"text":"Itching"},"description":"Itching"},{"manifestation":{"text":"Rash"},"description":"Rash"}]},{"resourceType":"AllergyIntolerance","recordedDate":"2015-06-17","patient":{"reference":"patients/mrn/12345"},"reporter":{"reference":"practitioners/22614","display":"MARSH, KEITH"},"substance":{"coding":[{"code":"33302","system":"Internal"}],"text":"ACETAMINOPHEN"},"criticality":"CRITU","type":"intolerance","reaction":[{"manifestation":{"text":"Lightheadedness"},"description":"Lightheadedness"}]},{"resourceType":"AllergyIntolerance","recordedDate":"2015-06-17","patient":{"reference":"patients/mrn/12345"},"reporter":{"reference":"practitioners/22614","display":"WRITER, AMANDA"},"substance":{"coding":[{"code":"56535","system":"Internal"}],"text":"ANACIN-3 WITH CODEINE"},"criticality":"CRITU","type":"allergy","reaction":[{"manifestation":{"text":"Diarrhea"},"description":"Diarrhea"},{"manifestation":{"text":"Delirium"},"description":"Delirium"}]},{"resourceType":"AllergyIntolerance","recordedDate":"2015-05-11","patient":{"reference":"patients/mrn/12345"},"reporter":{"reference":"practitioners/22614","display":"ASTHANA, VIVEK"},"substance":{"coding":[{"code":"8891","system":"Internal"}],"text":"SHELLFISH DERIVED"},"criticality":"CRITU","type":"intolerance","reaction":[{"manifestation":{"text":"Nausea And Vomiting"},"description":"Nausea And Vomiting"},{"manifestation":{"text":"Rash"},"description":"Rash"}]}]']]></scripting:script>
+    <munit:before-test name="experience-api-test-Before_Test" description="Before tests actions">
+        <set-variable variableName="patientID" value="#[12345]" doc:name="patientID"/>
+        <set-variable variableName="patientIDType" value="mrn" doc:name="patientIDType"/>
+    </munit:before-test>
+    <munit:test name="experience-api-test-post:/human/loadClinicalData:api-configTest" description="Test" >
+        <mock:when messageProcessor=".*:.*" doc:name="Mock scatter-gather">
+            <mock:with-attributes>
+                <mock:with-attribute name="doc:name" whereValue="#['Scatter-Gather']"/>
+            </mock:with-attributes>
+            <mock:then-return payload="#[]"/>
+        </mock:when>
+
+        <dw:transform-message doc:name="Input JSON">
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/json
+---
+{
+	patientID: 12345,
+	patientIDType: "mrn"
+}]]></dw:set-payload>
+        </dw:transform-message>
+        <http:request config-ref="HTTP_Request_Configuration" path="/human/loadClinicalData" method="POST" doc:name="Call APIkit"/>
+        <munit:assert-true message="The HTTP Status code is not correct!" condition="#[messageInboundProperty('http.status').is(eq(201))]" doc:name="assert - http.status eq 201"/>
+<!--         <HTTP:REQUEST CONFIG-REF="HTTP_REQUEST_CONFIGURATION" PATH="/HUMAN/LOADCLINICALDATA" METHOD="POST" DOC:NAME="CALL APIKIT"/> -->
+<!--         <OBJECT-TO-STRING-TRANSFORMER DOC:NAME="OBJECT TO STRING"/> -->
+<!--         <MUNIT:ASSERT-true message="The HTTP Status code is not correct!" condition="#[messageInboundProperty('http.status').is(eq(200))]" doc:name="assert - http.status eq 200"/> -->
+    </munit:test>
+    <munit:test name="experience-api-test-PatientTest" description="Test">
+        <mock:spy messageProcessor=".*:.*" doc:name="Spy GET Patient">
+            <mock:with-attributes>
+                <mock:with-attribute name="doc:name" whereValue="#['GET Patient']"/>
+            </mock:with-attributes>
+
+            <mock:assertions-after-call>
+                <expression-component doc:name="Save output to flowVars.json"><![CDATA[flowVars.json = org.apache.commons.io.IOUtils.toString(payload, "UTF-8");]]></expression-component>
+
+                <munit:assert-on-equals expectedValue="#[resultOfScript(&quot;fhirPatientJSON&quot;).replaceAll(&quot;\\s&quot;, &quot;&quot;)]" actualValue="#[flowVars.json.replaceAll(&quot;\\s&quot;, &quot;&quot;)]" doc:name="Verify contents of Patient response" message="The retrieved JSON should does not match expected value!"/>
+            </mock:assertions-after-call>
+        </mock:spy>
+        <mock:when messageProcessor=".*:.*" doc:name="Mock PUT Patient">
+            <mock:with-attributes>
+                <mock:with-attribute name="doc:name" whereValue="#['PUT Patient into SFDC']"/>
+            </mock:with-attributes>
+            <mock:then-return payload="#[&quot;success&quot;]" encoding="UTF-8" mimeType="application/json"/>
+        </mock:when>
+
+        <flow-ref name="Patient" doc:name="call Patient flow"/>
+
+        <munit:assert-true message="The HTTP Status code is not correct!" condition="#[messageInboundProperty('http.status').is(eq(200))]" doc:name="assert - http.status eq 200"/>
+    </munit:test>
+    <munit:test name="experience-api-test-ConditionTest" description="MUnit Test">
+        <mock:spy messageProcessor=".*:.*" doc:name="Spy GET Condition">
+            <mock:with-attributes>
+                <mock:with-attribute name="doc:name" whereValue="#['GET Condition']"/>
+            </mock:with-attributes>
+            <mock:assertions-after-call>
+                <expression-component doc:name="Save output to flowVars.json"><![CDATA[flowVars.json = org.apache.commons.io.IOUtils.toString(payload, "UTF-8");]]></expression-component>
+                <munit:assert-on-equals message="The retrieved JSON should does not match expected value!" expectedValue="#[resultOfScript(&quot;fhirConditionJSON&quot;).replaceAll(&quot;\\s+&quot;, &quot;&quot;)]" actualValue="#[flowVars.json.replaceAll(&quot;\\s&quot;, &quot;&quot;)]" doc:name="Verify contents of Condition response"/>
+            </mock:assertions-after-call>
+        </mock:spy>
+        <mock:when messageProcessor=".*:.*" doc:name="Mock POST Conditions">
+            <mock:with-attributes>
+                <mock:with-attribute name="doc:name" whereValue="#['POST Conditions into SFDC']"/>
+            </mock:with-attributes>
+            <mock:then-return payload="#[&quot;success&quot;]" encoding="UTF-8" mimeType="application/json"/>
+        </mock:when>
+        <flow-ref name="Condition" doc:name="call Condition flow"/>
+        <munit:assert-true message="The HTTP Status code is not correct!" condition="#[messageInboundProperty('http.status').is(eq(200))]" doc:name="assert - http.status eq 200"/>
+    </munit:test>
+    <munit:test name="experience-api-test-ObservationTest" description="MUnit Test">
+        <mock:spy doc:name="Spy GET Observation" messageProcessor=".*:.*">
+            <mock:with-attributes>
+                <mock:with-attribute name="doc:name" whereValue="#['GET Observation']"/>
+            </mock:with-attributes>
+            <mock:assertions-after-call>
+                <expression-component doc:name="Save output to flowVars.json"><![CDATA[flowVars.json = org.apache.commons.io.IOUtils.toString(payload, "UTF-8");]]></expression-component>
+                <munit:assert-on-equals message="The retrieved JSON should does not match expected value!" expectedValue="#[resultOfScript(&quot;fhirObservationJSON&quot;).replaceAll(&quot;\\s+&quot;, &quot;&quot;)]" actualValue="#[flowVars.json.replaceAll(&quot;\\s&quot;, &quot;&quot;)]" doc:name="Verify contents of Observation response"/>
+            </mock:assertions-after-call>
+        </mock:spy>
+        <mock:when messageProcessor=".*:.*" doc:name="Mock POST Observations">
+            <mock:with-attributes>
+                <mock:with-attribute name="doc:name" whereValue="#['POST Observations into SFDC']"/>
+            </mock:with-attributes>
+            <mock:then-return payload="#[&quot;success&quot;]" encoding="UTF-8" mimeType="application/json"/>
+        </mock:when>
+        <flow-ref name="Observation" doc:name="call Observation flow"/>
+        <munit:assert-true message="The HTTP Status code is not correct!" condition="#[messageInboundProperty('http.status').is(eq(200))]" doc:name="assert - http.status eq 200"/>
+    </munit:test>
+    <munit:test name="experience-api-test-MedicationPrescriptionTest" description="MUnit Test">
+        <mock:spy doc:name="Spy GET MedicationPrescription" messageProcessor=".*:.*">
+            <mock:with-attributes>
+                <mock:with-attribute name="doc:name" whereValue="#['GET MedicationPrescription']"/>
+            </mock:with-attributes>
+            <mock:assertions-after-call>
+                <expression-component doc:name="Save output to flowVars.json"><![CDATA[flowVars.json = org.apache.commons.io.IOUtils.toString(payload, "UTF-8");]]></expression-component>
+                <munit:assert-on-equals message="The retrieved JSON should does not match expected value!" expectedValue="#[resultOfScript(&quot;fhirMedicationJSON&quot;).replaceAll(&quot;\\s+&quot;, &quot;&quot;)]" actualValue="#[flowVars.json.replaceAll(&quot;\\s&quot;, &quot;&quot;)]" doc:name="Verify contents of MedicationPrescription response"/>
+            </mock:assertions-after-call>
+        </mock:spy>
+        <mock:when messageProcessor=".*:.*" doc:name="Mock POST Medications">
+            <mock:with-attributes>
+                <mock:with-attribute name="doc:name" whereValue="#['POST Medications into SFDC']"/>
+            </mock:with-attributes>
+            <mock:then-return payload="#[&quot;success&quot;]" encoding="UTF-8" mimeType="application/json"/>
+        </mock:when>
+        <flow-ref name="MedicationPrescription" doc:name="call MedicationPrescription flow"/>
+        <munit:assert-true message="The HTTP Status code is not correct!" condition="#[messageInboundProperty('http.status').is(eq(200))]" doc:name="assert - http.status eq 200"/>
+    </munit:test>
+    <munit:test name="experience-api-test-AllergyIntoleranceTest" description="MUnit Test">
+        <mock:spy messageProcessor=".*:.*" doc:name="Spy">
+            <mock:with-attributes>
+                <mock:with-attribute name="doc:name" whereValue="#['GET AllergyIntolerance']"/>
+            </mock:with-attributes>
+            <mock:assertions-after-call>
+                <expression-component doc:name="Save output to flowVars.json"><![CDATA[flowVars.json = org.apache.commons.io.IOUtils.toString(payload, "UTF-8");]]></expression-component>
+                <munit:assert-on-equals message="The retrieved JSON should does not match expected value!" expectedValue="#[resultOfScript(&quot;fhirAllergyJSON&quot;).replaceAll(&quot;\\s+&quot;, &quot;&quot;)]" actualValue="#[flowVars.json.replaceAll(&quot;\\s&quot;, &quot;&quot;)]" doc:name="Verify contents of AllergyIntolerance response"/>
+            </mock:assertions-after-call>
+        </mock:spy>
+        <mock:when messageProcessor=".*:.*" doc:name="Mock POST Allergies">
+            <mock:with-attributes>
+                <mock:with-attribute name="doc:name" whereValue="#['POST Allergies into SFDC']"/>
+            </mock:with-attributes>
+            <mock:then-return payload="#[&quot;success&quot;]" encoding="UTF-8" mimeType="application/json"/>
+        </mock:when>
+        <flow-ref name="AllergyIntolerance" doc:name="call AllergyIntolerance flow"/>
+        <munit:assert-true message="The HTTP Status code is not correct!" condition="#[messageInboundProperty('http.status').is(eq(200))]" doc:name="assert - http.status eq 200"/>
+    </munit:test>
+
+</mule>
