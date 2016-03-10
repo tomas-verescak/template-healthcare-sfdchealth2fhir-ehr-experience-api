@@ -3,6 +3,12 @@ title: healthcare-ehr2fhir-condition-process-api
 baseUri: https://healthcare-ehr2fhir-condition-process-api.cloudhub.io/api
 mediaType: application/json
 version: v1
+securedBy: [basic]
+securitySchemes:
+ - basic:
+    description: |
+      This API supports Basic Authentication.
+    type: Basic Authentication
 /patients/{patientIDType}/{patientID}/conditions:
   displayName: Conditions
   uriParameters:

@@ -3,6 +3,12 @@ title: healthcare-ehr2fhir-medication-process-api
 baseUri: https://healthcare-ehr2fhir-medication-process-api.cloudhub.io/api
 version: v1
 mediaType: application/json
+securedBy: [basic]
+securitySchemes:
+ - basic:
+    description: |
+      This API supports Basic Authentication.
+    type: Basic Authentication
 /patients/{patientIDType}/{patientID}/medicationorders:
   displayName: medicationOrder
   uriParameters:
