@@ -1,0 +1,29 @@
+#%RAML 0.8
+title: healthcare-ehr2fhir-practitioner-process-api
+baseUri: https://healthcare-ehr2fhir-practitioner-process-api.cloudhub.io/api
+mediaType: application/json
+version: v1
+securedBy: [basic]
+securitySchemes:
+ - basic:
+    description: |
+      This API supports Basic Authentication.
+    type: Basic Authentication
+/practitioners:
+  displayName: Practitioners
+  get:
+    description: Get all information about practitioners in the FHIR format
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include practitioners-fhir-response.json
+  /{id}:
+    get:
+      description: Get all information about practitioners with specificID in the FHIR format
+      responses:
+        200:
+          body:
+            application/json:
+              example: !include practitioner-fhir-response.json
+  

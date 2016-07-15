@@ -138,6 +138,10 @@ In order to use this Mule Anypoint Template you need to configure properties (Cr
 + api.allergyIntolerance.basepath `/api`
 + api.allergyIntolerance.port `8092`
 
++ api.practitioner.host `practitioner_process_api_hostname`
++ api.practitioner.basepath `/api`
++ api.practitioner.port `8092`
+
 + api.systemApi.host `ehr_system_api_hostname`
 + api.systemApi.basepath `/api`
 + api.systemApi.port `80`
