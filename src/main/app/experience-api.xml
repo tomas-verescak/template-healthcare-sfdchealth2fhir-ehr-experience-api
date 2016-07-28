@@ -69,7 +69,7 @@ http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/
 <!--         <http:raml-api-configuration location="healthcare-ehr2fhir-medication-process-api.raml"/> -->
    
 <!--     </http:request-config> -->
-    <http:request-config name="Health_cloud_system_API" host="${api.systemApi.port}" port="${api.systemApi.host}" basePath="${api.systemApi.basepath}" doc:name="HTTP Request Configuration" protocol="HTTPS">
+    <http:request-config name="Health_cloud_system_API" host="${api.systemApi.host}" port="${api.systemApi.port}" basePath="${api.systemApi.basepath}" doc:name="HTTP Request Configuration" protocol="HTTPS">
         <tls:context>
             <tls:trust-store path="${external.truststore.location}" password="${external.truststore.password}" type="jks" insecure="true"/>
         </tls:context>
