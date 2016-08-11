@@ -14,6 +14,9 @@ baseUri: http://healthcare-fhir2sfdchealth-ehr-system-api.cloudhub.io/api
       description: ID Type like MRN
   put:
     description: "Update Patient in the SFDC instance"
+    body:
+      application/json:
+        example: !include ../patient/patient-fhir-request.json
     responses:
       200:
         body:
@@ -21,6 +24,9 @@ baseUri: http://healthcare-fhir2sfdchealth-ehr-system-api.cloudhub.io/api
   /observations:
     post:  
       description: "Create new Observation in the SFDC instance"
+      body:
+        application/json:
+          example: !include ../observation/observation-fhir-request.json
       responses:
         200:
           body:
@@ -28,13 +34,28 @@ baseUri: http://healthcare-fhir2sfdchealth-ehr-system-api.cloudhub.io/api
   /conditions:
     post:  
       description: "Create new Condition in the SFDC instance"
+      body:
+        application/json:
+          example: !include ../condition/condition-fhir-request.json
       responses:
         200:
           body:
-            application/json:               
+            application/json:                
+    put:  
+      description: "Upsert Condition in the SFDC instance"
+      body:
+        application/json:
+          example: !include ../condition/condition-fhir-request.json
+      responses:
+        200:
+          body:
+            application/json:              
   /medications:
     post:  
       description: "Create new Medication in the SFDC instance"
+      body:
+        application/json:
+          example: !include ../medication/medicationorder-fhir-request.json
       responses:
         200:
           body:
@@ -42,10 +63,32 @@ baseUri: http://healthcare-fhir2sfdchealth-ehr-system-api.cloudhub.io/api
   /allergies:
     post:  
       description: "Create new Allergy in the SFDC instance"
+      body:
+        application/json:
+          example: !include ../allergyIntolerance/allergyIntolerance-fhir-request.json
       responses:
         200:
           body:
             application/json:               
+    put:  
+      description: "Upsert Allergy in the SFDC instance"
+      body:
+        application/json:
+          example: !include ../allergyIntolerance/allergyIntolerance-fhir-request.json
+      responses:
+        200:
+          body:
+            application/json:        
+  /devices:             
+    put:  
+      description: "Upsert Devices in the SFDC instance"
+      body:
+        application/json:
+          example: !include devices-fhir-request.json
+      responses:
+        200:
+          body:
+            application/json:
   /scheduling:
     post:  
       description: "Create new Scheduling in the SFDC instance"
@@ -54,12 +97,15 @@ baseUri: http://healthcare-fhir2sfdchealth-ehr-system-api.cloudhub.io/api
           body:
             application/json:              
   /encounters:
-    post:  
-      description: "Create new Encounter in the SFDC instance"
+    put:  
+      description: "Create new Encounter and respective Encounter Practitioner in the SFDC instance"
+      body:
+        application/json:
+          example: !include ../appointment/appointment-fhir-request.json
       responses:
         200:
           body:
-            application/json:         
+            application/json:
 /practitioners:
   displayName: Practitioners
   /{practitionerID}:
@@ -71,7 +117,7 @@ baseUri: http://healthcare-fhir2sfdchealth-ehr-system-api.cloudhub.io/api
       description: "Create new Practitioner in the SFDC instance"
       body:
         application/json:
-          example: !include practitioner-fhir-response.json
+          example: !include ../practitioner/practitioner-fhir-request.json
       responses:
         200:
           body:
@@ -80,8 +126,8 @@ baseUri: http://healthcare-fhir2sfdchealth-ehr-system-api.cloudhub.io/api
     description: "Upsert Practitioners in the SFDC instance"
     body:
       application/json:
-        example: !include practitioners-fhir-response.json
+        example: !include ../practitioner/practitioners-fhir-request.json
     responses:
       200:
         body:
-          application/json: 
+          application/json:

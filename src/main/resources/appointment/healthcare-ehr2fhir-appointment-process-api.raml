@@ -1,0 +1,30 @@
+#%RAML 0.8
+title: appointment-process-fhir
+version: v1
+mediaType: application/json
+securedBy: [basic]
+securitySchemes:
+ - basic:
+    description: |
+      This API supports Basic Authentication.
+    type: Basic Authentication
+/patients/{patientIDType}/{patientID}/appointments:
+  displayName: Appointment
+  get:
+    description: Get appointment information for given patient - FHIR
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include get-appointment-fhir-response.json
+/appointments:
+  post: 
+    description: Create appointment
+    queryParameters:
+    body:
+      application/json:
+        example: !include post-appointment-fhir-body.json
+    responses:
+      201:
+        body:
+          application/json:

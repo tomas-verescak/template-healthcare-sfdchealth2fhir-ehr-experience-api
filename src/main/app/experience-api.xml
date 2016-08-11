@@ -30,67 +30,72 @@ http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/
         <tls:context>
             <tls:key-store type="jks" path="${keystore.location}" alias="${key.alias}" keyPassword="${keystore.password}" password="${key.password}"/>
         </tls:context>
-
     </http:listener-config>
     
 <!--     <api-platform-gw:api id="${api.id}" apiName="${api.name}" version="${api.version}" flowRef="api-main" doc:name="API Autodiscovery"></api-platform-gw:api> -->
         
     <apikit:config name="api-config" raml="healthcare-sfdchealth2fhir-ehr-experience-api.raml" consoleEnabled="true" consolePath="console" doc:name="Router">
         <apikit:flow-mapping resource="/human/loadClinicalData" action="post" flow-ref="post:/human/loadClinicalData:api-config"/>
-
-
     </apikit:config>
-    <http:request-config name="Patient_API" host="${api.patient.host}" port="${api.patient.port}" doc:name="HTTP Request Configuration" protocol="HTTPS" basePath="${api.patient.basepath}">
+    
+    <http:request-config name="Patient_API" host="${api.patient.host}" port="${api.patient.port}" doc:name="HTTP Request Configuration"  basePath="${api.patient.basepath}" protocol="HTTPS">
         <tls:context>
             <tls:trust-store path="${truststore.location}" password="${truststore.password}" type="jks"/>
-      </tls:context>
-        <http:raml-api-configuration location="healthcare-ehr2fhir-patient-process-api.raml"/>
-
+        </tls:context>
+        <http:raml-api-configuration location="patient/healthcare-ehr2fhir-patient-process-api.raml"/>
     </http:request-config>
+    
 <!--     <http:request-config name="Observation_API" host="${api.observation.host}" port="${api.observation.port}" doc:name="HTTP Request Configuration" basePath="${api.observation.basepath}" protocol="HTTPS"> -->
 <!--         <tls:context> -->
 <!--             <tls:trust-store path="${truststore.location}" password="${truststore.password}" type="jks"/> -->
 <!--       </tls:context> -->
 <!--         <http:raml-api-configuration location="healthcare-ehr2fhir-observation-process-api.raml"/> -->
-
 <!-- 	</http:request-config> -->
-    <http:request-config name="Condition_API" host="${api.condition.host}" port="${api.condition.port}" doc:name="HTTP Request Configuration" basePath="${api.condition.basepath}" protocol="HTTPS">
-    	<tls:context>
-            <tls:trust-store path="${truststore.location}" password="${truststore.password}" type="jks"/>
-      </tls:context>
-        <http:raml-api-configuration location="healthcare-ehr2fhir-condition-process-api.raml"/>
-
-    </http:request-config>
 
 <!--     <http:request-config name="MedicationPrescription_API" host="${api.medicationprescription.host}" port="${api.medicationprescription.port}"  doc:name="HTTP Request Configuration" basePath="${api.medicationprescription.basepath}" protocol="HTTPS"> -->
 <!--          <tls:context> -->
 <!--             <tls:trust-store path="${truststore.location}" password="${truststore.password}" type="jks"/> -->
 <!--       </tls:context> -->
 <!--         <http:raml-api-configuration location="healthcare-ehr2fhir-medication-process-api.raml"/> -->
-   
 <!--     </http:request-config> -->
+
+    <http:request-config name="Condition_API" host="${api.condition.host}" port="${api.condition.port}" doc:name="HTTP Request Configuration" basePath="${api.condition.basepath}" protocol="HTTPS">
+    	<tls:context>
+            <tls:trust-store path="${truststore.location}" password="${truststore.password}" type="jks"/>
+      	</tls:context>
+        <http:raml-api-configuration location="condition/healthcare-ehr2fhir-condition-process-api.raml"/>
+    </http:request-config>
+
     <http:request-config name="Health_cloud_system_API" host="${api.systemApi.host}" port="${api.systemApi.port}" basePath="${api.systemApi.basepath}" doc:name="HTTP Request Configuration" protocol="HTTPS">
         <tls:context>
             <tls:trust-store path="${external.truststore.location}" password="${external.truststore.password}" type="jks" insecure="true"/>
         </tls:context>
-        <http:raml-api-configuration location="healthcare-fhir2sfdchealth-ehr-system-api.raml"/>
-
-
-
+        <http:raml-api-configuration location="sfhc-system-api/healthcare-fhir2sfdchealth-ehr-system-api.raml"/>
     </http:request-config>
+    
     <http:request-config name="AllergyIntolerance_API" protocol="HTTPS" host="${api.allergyIntolerance.host}" port="${api.allergyIntolerance.port}" basePath="${api.allergyIntolerance.basepath}" doc:name="HTTP Request Configuration">
         <tls:context>
             <tls:trust-store path="${truststore.location}" password="${truststore.password}" type="jks"/>
         </tls:context>
-        <http:raml-api-configuration location="healthcare-ehr2fhir-allergyintolerance-process-api.raml"/>
+        <http:raml-api-configuration location="allergyIntolerance/healthcare-ehr2fhir-allergyintolerance-process-api.raml"/>
     </http:request-config>
+    
     <http:request-config name="Practitioner_API" protocol="HTTPS" host="${api.practitioner.host}" port="${api.practitioner.port}" basePath="${api.practitioner.basepath}" doc:name="HTTP Request Configuration">
-        <http:basic-authentication username="" password=""/>
         <tls:context>
             <tls:trust-store path="${truststore.location}" password="${truststore.password}" type="jks"/>
         </tls:context>
-        <http:raml-api-configuration location="healthcare-ehr2fhir-practitioner-process-api.raml"/>
+        <http:raml-api-configuration location="practitioner/healthcare-ehr2fhir-practitioner-process-api.raml"/>
     </http:request-config>
+    
+    <http:request-config name="Appointment_API" host="${api.appointment.host}" port="${api.appointment.port}" basePath="${api.appointment.basepath}" doc:name="HTTP Request Configuration" protocol="HTTPS">
+        <tls:context>
+            <tls:trust-store path="${truststore.location}" password="${truststore.password}" type="jks"/>
+        </tls:context>
+        <http:raml-api-configuration location="appointment/healthcare-ehr2fhir-appointment-process-api.raml"/>
+    </http:request-config>
+    
+    
+        
     <flow name="api-main">
         <http:listener config-ref="api-httpListenerConfig" path="/api/*" doc:name="HTTP"/>
         <apikit:router config-ref="api-config" doc:name="APIkit Router"/>
@@ -117,6 +122,7 @@ payload.patientIDType]]></dw:set-variable>
 <!--                 <flow-ref name="MedicationPrescription" doc:name="MedicationPrescription"/> -->
                 <flow-ref name="AllergyIntolerance" doc:name="AllergyIntolerance"/>
                 <flow-ref name="Practitioner" doc:name="Practitioner"/>
+                <flow-ref name="Appointment" doc:name="Appointment"/>
             </scatter-gather>
         </async>
         <logger message="The POST process has finished." level="INFO" doc:name="Log success"/>
@@ -126,35 +132,29 @@ payload.patientIDType]]></dw:set-variable>
 ---
 {"message": "The POST process has finished."}]]></dw:set-payload>
         </dw:transform-message>
-
     </flow>
+    
     <sub-flow name="Patient">
-
-
         <http:request config-ref="Patient_API" path="/patients/{patientIDType}/{patientID}" method="GET" doc:name="GET Patient">
             <http:request-builder>
                 <http:uri-param paramName="patientID" value="#[flowVars.patientID]"/>
                 <http:uri-param paramName="patientIDType" value="#[flowVars.patientIDType]"/>
-
-
             </http:request-builder>
         </http:request>
-
-
         <http:request config-ref="Health_cloud_system_API" path="/patients/{patientIDType}/{patientID}" method="PUT" doc:name="PUT Patient into SFDC">
             <http:request-builder>
                 <http:uri-param paramName="patientID" value="#[flowVars.patientID]"/>
                 <http:uri-param paramName="patientIDType" value="#[flowVars.patientIDType]"/>
-
-
             </http:request-builder>
         </http:request>
     </sub-flow>
+    
     <sub-flow name="Practitioner">
         <http:request config-ref="Practitioner_API" path="/practitioners" method="GET" doc:name="GET Practitioners"/>
         <http:request config-ref="Health_cloud_system_API" path="/practitioners" method="PUT" doc:name="PUT Practitioners into SFDC">
         </http:request>
     </sub-flow>
+    
     <sub-flow name="Condition">
 
 
@@ -162,59 +162,47 @@ payload.patientIDType]]></dw:set-variable>
             <http:request-builder>
                 <http:uri-param paramName="patientID" value="#[flowVars.patientID]"/>
                 <http:uri-param paramName="patientIDType" value="#[flowVars.patientIDType]"/>
-
-
             </http:request-builder>
         </http:request>
-
         <http:request config-ref="Health_cloud_system_API" path="/patients/{patientIDType}/{patientID}/conditions" method="POST" doc:name="POST Conditions into SFDC">
             <http:request-builder>
                 <http:uri-param paramName="patientIDType" value="#[flowVars.patientIDType]"/>
                 <http:uri-param paramName="patientID" value="#[flowVars.patientID]"/>
-
             </http:request-builder>
         </http:request>
     </sub-flow>
+    
 <!--     <sub-flow name="Observation"> -->
-
-
 <!--         <http:request config-ref="Observation_API" path="/patients/{patientIDType}/{patientID}/observations" method="GET" doc:name="GET Observation"> -->
 <!--             <http:request-builder> -->
 <!--                 <http:uri-param paramName="patientID" value="#[flowVars.patientID]"/> -->
 <!--                 <http:uri-param paramName="patientIDType" value="#[flowVars.patientIDType]"/> -->
-
 <!--             </http:request-builder> -->
 <!--         </http:request> -->
-
 <!--         <http:request config-ref="Health_cloud_system_API" path="/patients/{patientIDType}/{patientID}/observations" method="POST" doc:name="POST Observations into SFDC"> -->
 <!--             <http:request-builder> -->
 <!--                 <http:uri-param paramName="patientIDType" value="#[flowVars.patientIDType]"/> -->
 <!--                 <http:uri-param paramName="patientID" value="#[flowVars.patientID]"/> -->
-
 <!--             </http:request-builder> -->
 <!--         </http:request> -->
 <!--     </sub-flow> -->
+
 <!--     <sub-flow name="MedicationPrescription"> -->
-
-
 <!--         <http:request config-ref="MedicationPrescription_API" path="/patients/{patientIDType}/{patientID}/medicationorders" method="GET" doc:name="GET MedicationPrescription"> -->
 <!--             <http:request-builder> -->
 <!--                 <http:uri-param paramName="patientID" value="#[flowVars.patientID]"/> -->
 <!--                 <http:uri-param paramName="patientIDType" value="#[flowVars.patientIDType]"/> -->
-
-
 <!--             </http:request-builder> -->
 <!--         </http:request> -->
-
 <!--         <http:request config-ref="Health_cloud_system_API" path="/patients/{patientIDType}/{patientID}/medications" method="POST" doc:name="POST Medications into SFDC"> -->
 <!--             <http:request-builder> -->
 <!--                 <http:uri-param paramName="patientIDType" value="#[flowVars.patientIDType]"/> -->
 <!--                 <http:uri-param paramName="patientID" value="#[flowVars.patientID]"/> -->
-
-
 <!--             </http:request-builder> -->
 <!--         </http:request> -->
 <!--     </sub-flow> -->
+
+
     <sub-flow name="AllergyIntolerance">
         <http:request config-ref="AllergyIntolerance_API" path="/patients/{patientIDType}/{patientID}/allergies" method="GET" doc:name="GET AllergyIntolerance">
             <http:request-builder>
@@ -226,6 +214,21 @@ payload.patientIDType]]></dw:set-variable>
             <http:request-builder>
                 <http:uri-param paramName="patientIDType" value="#[flowVars.patientIDType]"/>
                 <http:uri-param paramName="patientID" value="#[flowVars.patientID]"/>
+            </http:request-builder>
+        </http:request>
+    </sub-flow>
+    
+    <sub-flow name="Appointment">
+        <http:request config-ref="Appointment_API" path="/patients/{patientIDType}/{patientID}/appointments" method="GET" doc:name="GET Appointment">
+            <http:request-builder>
+                <http:uri-param paramName="patientIDType" value="#[flowVars.patientIDType]"/>
+                <http:uri-param paramName="patientID" value="#[flowVars.patientID]"/>
+            </http:request-builder>
+        </http:request>
+        <http:request config-ref="Health_cloud_system_API" path="/patients/{patientIDType}/{patientID}/encounters" method="PUT" doc:name="PUT Appointments into SFDC">
+            <http:request-builder>
+                <http:uri-param paramName="patientID" value="#[flowVars.patientID]"/>
+                <http:uri-param paramName="patientIDType" value="#[flowVars.patientIDType]"/>
             </http:request-builder>
         </http:request>
     </sub-flow>
